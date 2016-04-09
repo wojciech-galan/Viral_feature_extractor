@@ -86,3 +86,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Excluded by me
+error_dir/

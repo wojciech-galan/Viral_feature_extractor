@@ -50,4 +50,4 @@ if __name__ == "__main__":
         except IOError, e:
             print e
     print ids, len(ids)
-    #findHost(term, ids)
+    findHost(term, ids)

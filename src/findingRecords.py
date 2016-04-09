@@ -20,8 +20,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>"""
 
+import json
+import os
+
 from Bio import Entrez
 
+CONF = json.load(open("../etc/conf.json"))
 
 def findRecords(term, database, retmax=0):
     # if retmax==0 - dostajemy wszystkie rekordy
@@ -30,8 +34,112 @@ def findRecords(term, database, retmax=0):
         record = Entrez.read(handle)
         retmax = record['Count']
     handle = Entrez.esearch(db=database, term=term, retmax=retmax)
-    print handle.geturl()
+    #print handle.geturl()
     id_list = Entrez.read(handle)['IdList']
     handle.close()
     print "Found %s ids" % len(id_list)
+    return id_list
+
+def createEmptyFile(path):
+    """
+    Creates empty file if it doesn't exist
+    :param path:
+    :return: None
+    """
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path.rsplit(os.sep))
+        finally:
+            os.utime(path, None)
+
+def createDirIfNotExists(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def findHost(term, ids, directory=res_dir, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
+             improper_host_path=CONF['improper_host_path'], rettype='xml'):
+    '''Argumenty:
+    - term - to co dostajemy po termCreation
+    - ids - lista identyfikatorow sekwencji z bazy nuccore
+    - temp_directory - folder na czesciowe wyniki
+    - directory - w którym folderze ma być to zapisywane
+    - seq_directory - folder na pliki xml z sekwencjami
+    - tex_directory - folder na pliki xml z bazy taxonomy'''
+    seqs_with_host=[]
+    seqs_without_host=[]
+    seqs = []
+    createEmptyFile(improper_host_path)
+    createDirIfNotExists(directory)
+    createDirIfNotExists(tax_directory)
+    createDirIfNotExists(seq_directory)
+    #if not os.path.exists(seq_directory):
+    #    os.mkdir(containers_path)
+    try:
+    	os.mkdir( '../prints' )
+    except OSError:
+    	pass
+    while id_list:
+    	#pdb.set_trace()
+        try:
+            print "With host:%d\twith no host:%d"%(len(seqs_with_host), len(seqs_without_host))
+            print '%s ids left'%len(id_list)
+            '''if not len(id_list)%20:
+                raise KeyboardInterrupt()'''
+            #id_ = id_list[random.randint(0, len(id_list)-1)]
+            id_ = id_list[0]
+            #setTemp( id_ )
+            try:
+                handle=open("%s%s"%(seq_directory, id_))
+            except IOError:
+                handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
+                print handle.geturl()
+                open("%s%s"%(seq_directory, id_), 'w').write(handle.read())
+                handle.close()
+                handle=open("%s%s"%(seq_directory, id_))
+            seq=LittleParser.fromHandle(handle)
+            handle.close()
+            seqs.append( seq )
+            '''if seq.hasHost():
+                seqs_with_host.append(seq)
+            else:
+                seqs_without_host.append(seq)'''
+            id_list.remove(id_)
+        except (KeyboardInterrupt, SystemExit):
+            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            return
+        except RuntimeError:
+            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            time.sleep(1)
+        #except (Entrez.Parser.NotXMLError, httplib.IncompleteRead):
+        except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError ):
+            #raise
+            print "Parsing error while parsing %s%s"%(seq_directory, id_)
+            try:
+                os.remove("%s%s"%(seq_directory, id_))
+            except (IOError, OSError):
+                pass
+            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            time.sleep(1)
+        except NameError:
+            #gdy mamy RuntimeException, to on go nie zna
+            #więc wyrzuca NameError
+            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            time.sleep(1)
+        finally:
+        	handle.close()
+            #raise
+    #print countProper(), 'proper sequences'
+
+    part_name=term+'_'+dateTime()
+    host_fname=toFileName(part_name)+'_host.dump'
+    no_host_fname=toFileName(part_name)+'_no_host.dump'
+    ids_left_fname=toFileName(part_name)+'_ids_left.dump'
+
+    dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, directory)
+    shutil.rmtree(temp_directory)
+    difflist = [ x for x in os.listdir(seq_directory) if x not in os.listdir( '../prints' ) ]
+    open( '../seqs', 'w' ).write( '\n\n'.join( [str(s) for s in seqs] ) )
+    open( '../prints/diff', 'w' ).write( '\n'.join( difflist ) )
+    container = Container( seqs )
+    container.save()
     return id_list
