@@ -19,3 +19,19 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>"""
+
+from Bio import Entrez
+
+
+def findRecords(term, database, retmax=0):
+    # if retmax==0 - dostajemy wszystkie rekordy
+    if not retmax:
+        handle = Entrez.esearch(db=database, term=term)
+        record = Entrez.read(handle)
+        retmax = record['Count']
+    handle = Entrez.esearch(db=database, term=term, retmax=retmax)
+    print handle.geturl()
+    id_list = Entrez.read(handle)['IdList']
+    handle.close()
+    print "Found %s ids" % len(id_list)
+    return id_list

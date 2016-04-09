@@ -49,4 +49,5 @@ if __name__ == "__main__":
             control=0
         except IOError, e:
             print e
-    findHost(term, ids)
+    print ids, len(ids)
+    #findHost(term, ids)
