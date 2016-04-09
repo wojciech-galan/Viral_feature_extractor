@@ -1,0 +1,3 @@
+{
+  "eutils_term":"Viruses[Organism] AND srcdb_refseq[PROP] NOT wgs[prop] NOT cellular organisms[ORGN] NOT AC_000001:AAC_999999[pacc]"
+}
