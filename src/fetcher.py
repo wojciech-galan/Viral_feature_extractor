@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-""" This file is a part of an application named
+""" This file is a part of an application named viral_seq_fetcher
     If you have any questions and/or comments, don't hesitate to 
     contact me by email wojciech.galan@gmail.com
     
-    Copyright (C) 2016  Wojciech Gałan
+    CopyLeft (C) 2016  Wojciech Gałan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
