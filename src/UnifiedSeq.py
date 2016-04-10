@@ -402,7 +402,7 @@ class SeqRepresentation( BaseXML ):
 		
 		#self.avg_enc = weightedArithmeticMean( self.
 		#pdb.set_trace()
-		print self
+		#print self
 		#pdb.set_trace()
 
 class NoSequenceException( MyException ):
