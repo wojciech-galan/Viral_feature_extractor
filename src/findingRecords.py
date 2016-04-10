@@ -22,13 +22,25 @@
 
 import json
 import os
+import time
+import pdb
+import socket
+import httplib
+import urllib2
 
+import cPickle as pickle
+
+from lxml import etree
 from Bio import Entrez
+
+from LittleParser import LittleParser
 
 CONF = json.load(open("../etc/conf.json"))
 
-def findRecords(term, database, retmax=0):
+def findRecords(term, database, debug=False, retmax=0):
     # if retmax==0 - dostajemy wszystkie rekordy
+    if debug:
+        return ['985485914', '1013949532', '1013949529', '1013949526']
     if not retmax:
         handle = Entrez.esearch(db=database, term=term)
         record = Entrez.read(handle)
@@ -46,17 +58,18 @@ def createEmptyFile(path):
     :param path:
     :return: None
     """
+    #pdb.set_trace()
     if not os.path.exists(path):
-        try:
-            os.makedirs(path.rsplit(os.sep))
-        finally:
-            os.utime(path, None)
+        directory = path.rsplit(os.sep, 1)[0]
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        open(path, 'w').close()
 
 def createDirIfNotExists(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-def findHost(term, ids, directory=res_dir, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
+def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
              improper_host_path=CONF['improper_host_path'], rettype='xml'):
     '''Argumenty:
     - term - to co dostajemy po termCreation
@@ -74,41 +87,28 @@ def findHost(term, ids, directory=res_dir, seq_directory=CONF['seq_dir'], tax_di
     createDirIfNotExists(seq_directory)
     #if not os.path.exists(seq_directory):
     #    os.mkdir(containers_path)
-    try:
-    	os.mkdir( '../prints' )
-    except OSError:
-    	pass
+    # try:
+    # 	os.mkdir( '../prints' )
+    # except OSError:
+    # 	pass
     while id_list:
-    	#pdb.set_trace()
+        print '%s ids left'%len(id_list)
+        id_ = id_list[0]
+        path = os.path.join(seq_directory, id_)
+        if not os.path.exists(path):
+            handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
+            print handle.geturl()
+            open(path, 'w').write(handle.read())
         try:
-            print "With host:%d\twith no host:%d"%(len(seqs_with_host), len(seqs_without_host))
-            print '%s ids left'%len(id_list)
-            '''if not len(id_list)%20:
-                raise KeyboardInterrupt()'''
-            #id_ = id_list[random.randint(0, len(id_list)-1)]
-            id_ = id_list[0]
-            #setTemp( id_ )
-            try:
-                handle=open("%s%s"%(seq_directory, id_))
-            except IOError:
-                handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
-                print handle.geturl()
-                open("%s%s"%(seq_directory, id_), 'w').write(handle.read())
-                handle.close()
-                handle=open("%s%s"%(seq_directory, id_))
-            seq=LittleParser.fromHandle(handle)
-            handle.close()
-            seqs.append( seq )
-            '''if seq.hasHost():
-                seqs_with_host.append(seq)
-            else:
-                seqs_without_host.append(seq)'''
+            with open(path) as handle:
+                seq=LittleParser.fromHandle(handle)
+                seqs.append( seq )
             id_list.remove(id_)
         except (KeyboardInterrupt, SystemExit):
-            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             return
         except RuntimeError:
-            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             time.sleep(1)
         #except (Entrez.Parser.NotXMLError, httplib.IncompleteRead):
         except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError ):
@@ -118,28 +118,29 @@ def findHost(term, ids, directory=res_dir, seq_directory=CONF['seq_dir'], tax_di
                 os.remove("%s%s"%(seq_directory, id_))
             except (IOError, OSError):
                 pass
-            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             time.sleep(1)
         except NameError:
+            pdb.set_trace()
             #gdy mamy RuntimeException, to on go nie zna
             #więc wyrzuca NameError
-            dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             time.sleep(1)
         finally:
         	handle.close()
             #raise
     #print countProper(), 'proper sequences'
 
-    part_name=term+'_'+dateTime()
-    host_fname=toFileName(part_name)+'_host.dump'
-    no_host_fname=toFileName(part_name)+'_no_host.dump'
-    ids_left_fname=toFileName(part_name)+'_ids_left.dump'
-
-    dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, directory)
-    shutil.rmtree(temp_directory)
-    difflist = [ x for x in os.listdir(seq_directory) if x not in os.listdir( '../prints' ) ]
-    open( '../seqs', 'w' ).write( '\n\n'.join( [str(s) for s in seqs] ) )
-    open( '../prints/diff', 'w' ).write( '\n'.join( difflist ) )
-    container = Container( seqs )
-    container.save()
+    # part_name=term+'_'+dateTime()
+    # host_fname=toFileName(part_name)+'_host.dump'
+    # no_host_fname=toFileName(part_name)+'_no_host.dump'
+    # ids_left_fname=toFileName(part_name)+'_ids_left.dump'
+    #
+    # #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, directory)
+    # #shutil.rmtree(temp_directory)
+    # difflist = [ x for x in os.listdir(seq_directory) if x not in os.listdir( '../prints' ) ]
+    # open( '../seqs', 'w' ).write( '\n\n'.join( [str(s) for s in seqs] ) )
+    # open( '../prints/diff', 'w' ).write( '\n'.join( difflist ) )
+    # container = Container( seqs )
+    # container.save()
     return id_list

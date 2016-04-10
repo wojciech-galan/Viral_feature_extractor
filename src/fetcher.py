@@ -29,9 +29,13 @@ from findingRecords import *
 CONF = json.load(open("../etc/conf.json"))
 
 if __name__ == "__main__":
+    import sys
+    print sys.argv
     #raise Exception('najpierw przekopiować to do "projekt" i uruchomić, potem przerzucić do klasy annotation')
-    parser = argparse.ArgumentParser(description='Short sample app')
+    parser = argparse.ArgumentParser(description='Short sample description')
     parser.add_argument('email', action="store")
+    # "d" stands for "debug"
+    parser.add_argument('-d', action="store_true", default=False)
     result = parser.parse_args()
     Entrez.email=result.email
     #term = termCreation('complete', 'title', 'refseq', 'viruses')
@@ -45,7 +49,7 @@ if __name__ == "__main__":
     control=1
     while control:
         try:
-            ids=findRecords(term, "nuccore")
+            ids=findRecords(term, "nuccore", result.d)
             control=0
         except IOError, e:
             print e
