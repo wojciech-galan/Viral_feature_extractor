@@ -58,12 +58,14 @@ class LittleParser(object):
 		
 		object_dict['_za_ktorym_razem']=0
 		object_dict['_host']=[]
-		try:
-			seq = _parse(handle)#object_dict.update(_parse(handle))
-		except Exception, e:
-			import traceback
-			print traceback.format_exc()
-			pdb.set_trace()
+		# file is empty - throws XMLSyntaxError
+		seq = _parse(handle)  # object_dict.update(_parse(handle))
+		# try:
+		# 	seq = _parse(handle)#object_dict.update(_parse(handle))
+		# except Exception, e:
+		# 	import traceback
+		# 	print traceback.format_exc()
+		# 	pdb.set_trace()
 		return seq #cls(**object_dict) # do wyjebania
 		#if object_dict['_name']=='../sequences/158120308':
 		#	open('aaaa', 'w').write(str(object_dict))

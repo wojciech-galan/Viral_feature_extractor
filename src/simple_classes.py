@@ -129,7 +129,11 @@ class AType(Base):
 
 class MyException( Exception ):
 	pass
-	
+
+
+class UnexpectedValueException(Exception):
+    pass
+
 
 class DictContainsInterface:
 	

@@ -9,6 +9,7 @@ import urllib2
 import re
 
 from Bio import Entrez
+import logging
 Entrez.email = 'wojciech.galan@gmail.com'
 from lxml import etree
 from daos import SpeciesDAO
@@ -17,6 +18,7 @@ from entities import Species
 from constants import *
 from species import species_dict
 
+logger = logging.getLogger(os.path.basename(__file__))
 
 def getHostNames():
 	'''Zwraca listę wszystkich nazw hostów'''
@@ -41,8 +43,8 @@ def getAllHosts():
 			handle=Entrez.esearch(db='taxonomy', term='species[rank] AND specified[prop]', retmax=retmax)
 			id_list = Entrez.read(handle)['IdList']
 			done = True
-		except URLError:
-			pass
+		except URLError, e:
+			logger.error(e)
 		finally:
 			handle.close()
 	print len( id_list ), retmax
@@ -97,13 +99,13 @@ def findHostInNCBITaxonomy( host_name ):
 			print "Looking for host in %s" % handle.geturl()
 			id_list = Entrez.read(handle)['IdList']
 			done = True
-		except:
-			pass
+		except Exception, e:
+			logger.error(e)
 		finally:
 			try:
 				handle.close()
-			except UnboundLocalError:
-				pass
+			except UnboundLocalError, e:
+				logger.error(e)
 	#pdb.set_trace()
 	if len( id_list ) == 1:
 		host_already_in_db = hostAlreadyInDb( host_name )
@@ -171,12 +173,14 @@ def lineage(host_id, tax_directory=tax_dir):
 				handle=Entrez.efetch(db='taxonomy',id=host_id)
 				open("%s%s"%(tax_directory, host_id), 'w').write(handle.read())
 				handle.close()
-			except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError ):
+			except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError ), e:
+				logger.error(e)
 				continue
 			handle=open("%s%s"%(tax_directory, host_id))
 			try:
 				content=Entrez.read(handle)
-			except Entrez.Parser.NotXMLError:
+			except Entrez.Parser.NotXMLError, e:
+				logger.error( e )
 				os.remove("%s%s"%(tax_directory, host_id))
 				continue
 			finally:

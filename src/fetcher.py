@@ -21,16 +21,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>"""
 
 import json
+import logging
 import argparse
 
 from Bio import Entrez
 from findingRecords import *
 
 CONF = json.load(open("../etc/conf.json"))
+filename = os.path.join(os.path.dirname(__file__), CONF['log_file'])
+
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename=filename,
+                    filemode='w')
 
 if __name__ == "__main__":
-    import sys
-    print sys.argv
+    logger = logging.getLogger(os.path.basename(__file__))
     #raise Exception('najpierw przekopiować to do "projekt" i uruchomić, potem przerzucić do klasy annotation')
     parser = argparse.ArgumentParser(description='Short sample description')
     parser.add_argument('email', action="store")
@@ -52,6 +60,7 @@ if __name__ == "__main__":
             ids=findRecords(term, "nuccore", result.d)
             control=0
         except IOError, e:
+            logger.error(e)
             print e
     print ids, len(ids)
     findHost(term, ids)

@@ -2,9 +2,14 @@
 #-*- coding: utf-8 -*-
 
 import pdb
+import logging
+import os
 
 #from ParserClasses import Seq_entry_seq_
 from simple_classes import BaseXML, MyException, DictContainsInterface
+from simple_classes import UnexpectedValueException
+
+logger = logging.getLogger(os.path.basename(__file__))
 
 class SeqEntrySeq( BaseXML ):
 	"Klasa macierzysta do wyciągania potrzebnych wartości z Seq_entry_seq_"
@@ -100,7 +105,7 @@ class SeqEntrySeq( BaseXML ):
 					for seq_feat in seq_annot_data_ftable_.seq_feat_:
 						seqfeatdata = seq_feat.seq_feat_data_.seqfeatdata
 						if 'seqfeatdata_cdregion' in seqfeatdata:
-							pdb.set_trace() #zrobić cdregionreference. jak konflikt, to zmienić self.missing_cd_regions
+							pass # pdb.set_trace() #zrobić cdregionreference. jak konflikt, to zmienić self.missing_cd_regions
 						elif 'seqfeatdata_org' in seqfeatdata:
 							pdb.set_trace() #  to się chyba nie zdarza #miałoby chyba być jak orgref z description
 						elif 'seqfeatdata_gene' in seqfeatdata:
@@ -130,8 +135,7 @@ class StandaloneSeqEntrySeq( SeqEntrySeq ):
 			pdb.set_trace()
 		#pdb.set_trace()
 		if not self.strand in [ 'ss', 'ds', 'mixed' ]:
-			print self.strand
-			#pdb.set_trace()
+			logger.debug(self.strand)
 		
 		#inst skończony
 		#pora na hosta

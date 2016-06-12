@@ -27,6 +27,7 @@ import pdb
 import socket
 import httplib
 import urllib2
+import logging
 
 import cPickle as pickle
 
@@ -34,8 +35,10 @@ from lxml import etree
 from Bio import Entrez
 
 from LittleParser import LittleParser
+from simple_classes import UnexpectedValueException
 
 CONF = json.load(open("../etc/conf.json"))
+logger = logging.getLogger(os.path.basename(__file__))
 
 def findRecords(term, database, debug=False, retmax=0):
     # if retmax==0 - dostajemy wszystkie rekordy
@@ -104,23 +107,28 @@ def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], 
                 seq=LittleParser.fromHandle(handle)
                 seqs.append( seq )
             id_list.remove(id_)
-        except (KeyboardInterrupt, SystemExit):
+        except (KeyboardInterrupt, SystemExit), e:
             #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            logger.info(e)
             return
-        except RuntimeError:
+        except RuntimeError, e:
             #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            logger.error(e)
+            print e
             time.sleep(1)
         #except (Entrez.Parser.NotXMLError, httplib.IncompleteRead):
-        except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError ):
+        except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError ), e:
             #raise
             print "Parsing error while parsing %s%s"%(seq_directory, id_)
+            logger.error(e)
             try:
-                os.remove("%s%s"%(seq_directory, id_))
-            except (IOError, OSError):
-                pass
+                os.remove(os.path.join(seq_directory, id_))
+            except (IOError, OSError), er:
+                logger.info(er)
             #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             time.sleep(1)
-        except NameError:
+        except NameError, e:
+            logger.debug(e)
             pdb.set_trace()
             #gdy mamy RuntimeException, to on go nie zna
             #więc wyrzuca NameError
