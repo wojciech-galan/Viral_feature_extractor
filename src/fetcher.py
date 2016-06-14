@@ -23,6 +23,7 @@
 import json
 import logging
 import argparse
+import socket
 
 from Bio import Entrez
 from findingRecords import *
@@ -63,4 +64,7 @@ if __name__ == "__main__":
             logger.error(e)
             print e
     print ids, len(ids)
+    socket.setdefaulttimeout(1)
     findHost(term, ids)
+    # TODO pododawac timeuty
+    # TODO wyjebać printy z hostProcessing i findingRecords

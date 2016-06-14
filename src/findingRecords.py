@@ -28,6 +28,7 @@ import socket
 import httplib
 import urllib2
 import logging
+import socket
 
 import cPickle as pickle
 
@@ -101,12 +102,18 @@ def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], 
         if not os.path.exists(path):
             handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
             print handle.geturl()
-            open(path, 'w').write(handle.read())
+            with open(path, 'w') as file_handle:
+                file_handle.write(handle.read())
+            print "written on disk"
         try:
             with open(path) as handle:
                 seq=LittleParser.fromHandle(handle)
                 seqs.append( seq )
             id_list.remove(id_)
+        except socket.Timeouterror, e:
+            logger.error(e)
+            print e
+            time.sleep(1)
         except (KeyboardInterrupt, SystemExit), e:
             #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             logger.info(e)
@@ -129,10 +136,8 @@ def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], 
             time.sleep(1)
         except NameError, e:
             logger.debug(e)
-            pdb.set_trace()
-            #gdy mamy RuntimeException, to on go nie zna
-            #więc wyrzuca NameError
-            #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            # RuntimeException thrown by BioPython - it's BioPython's bug
+            # should be RuntimeError
             time.sleep(1)
         finally:
         	handle.close()

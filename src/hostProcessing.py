@@ -98,6 +98,7 @@ def findHostInNCBITaxonomy( host_name ):
 			handle=Entrez.esearch(db='taxonomy', term=host_name)
 			print "Looking for host in %s" % handle.geturl()
 			id_list = Entrez.read(handle)['IdList']
+			print "id_list fetched"
 			done = True
 		except Exception, e:
 			logger.error(e)
@@ -169,6 +170,7 @@ def lineage(host_id, tax_directory=tax_dir):
 		content=Entrez.read(handle)
 	else:
 		while True:
+			print "in loop"
 			try:
 				handle=Entrez.efetch(db='taxonomy',id=host_id)
 				open("%s%s"%(tax_directory, host_id), 'w').write(handle.read())
@@ -176,6 +178,9 @@ def lineage(host_id, tax_directory=tax_dir):
 			except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError ), e:
 				logger.error(e)
 				continue
+			except socket.Timeouterror, e:
+				logger.error(e)
+				print e
 			handle=open("%s%s"%(tax_directory, host_id))
 			try:
 				content=Entrez.read(handle)
