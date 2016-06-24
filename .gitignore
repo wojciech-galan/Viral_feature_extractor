@@ -90,3 +90,4 @@ ENV/
 # Excluded by me
 error_dir/
 logs/
+sequences/
