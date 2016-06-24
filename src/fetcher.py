@@ -39,14 +39,19 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='w')
 
 if __name__ == "__main__":
+    import sys
+
+    print sys.argv
     logger = logging.getLogger(os.path.basename(__file__))
-    #raise Exception('najpierw przekopiować to do "projekt" i uruchomić, potem przerzucić do klasy annotation')
     parser = argparse.ArgumentParser(description='Short sample description')
-    parser.add_argument('email', action="store")
+    parser.add_argument('--email', action="store")
+    parser.add_argument('--timeout', action="store", type=int)
     # "d" stands for "debug"
     parser.add_argument('-d', action="store_true", default=False)
     result = parser.parse_args()
+    print result
     Entrez.email=result.email
+    timeout = result.timeout
     #term = termCreation('complete', 'title', 'refseq', 'viruses')
     #print term
     # term na podstawie http://www.ncbi.nlm.nih.gov/genomes/GenomesHome.cgi?taxid=10239&hopt=faq#retrieve%20refseq
@@ -64,7 +69,7 @@ if __name__ == "__main__":
             logger.error(e)
             print e
     print ids, len(ids)
-    socket.setdefaulttimeout(1)
+    socket.setdefaulttimeout(timeout)
     findHost(term, ids)
-    # TODO pododawac timeuty
+    # TODO wyjebać adres mailowy z hostProcessing
     # TODO wyjebać printy z hostProcessing i findingRecords

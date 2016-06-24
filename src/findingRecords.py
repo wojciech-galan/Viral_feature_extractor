@@ -99,21 +99,26 @@ def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], 
         print '%s ids left'%len(id_list)
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
-        if not os.path.exists(path):
-            handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
-            print handle.geturl()
-            with open(path, 'w') as file_handle:
-                file_handle.write(handle.read())
-            print "written on disk"
+        while not os.path.exists(path):
+            try:
+                handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
+                print handle.geturl()
+                with open(path, 'w') as file_handle:
+                    file_handle.write(handle.read())
+                print "written on disk"
+            except (urllib2.URLError, socket.timeout, socket.error), e:
+                logger.error(e)
+                print e
+                time.sleep(1)
+            except (KeyboardInterrupt, SystemExit), e:
+                #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+                logger.info(e)
+                return
         try:
             with open(path) as handle:
                 seq=LittleParser.fromHandle(handle)
                 seqs.append( seq )
             id_list.remove(id_)
-        except socket.Timeouterror, e:
-            logger.error(e)
-            print e
-            time.sleep(1)
         except (KeyboardInterrupt, SystemExit), e:
             #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             logger.info(e)

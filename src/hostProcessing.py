@@ -178,7 +178,7 @@ def lineage(host_id, tax_directory=tax_dir):
 			except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError ), e:
 				logger.error(e)
 				continue
-			except socket.Timeouterror, e:
+			except socket.timeout, e:
 				logger.error(e)
 				print e
 			handle=open("%s%s"%(tax_directory, host_id))
