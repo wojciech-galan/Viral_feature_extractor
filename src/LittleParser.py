@@ -37,7 +37,7 @@ class LittleParser(object):
 		return cls(**object_dict)
 
 	@classmethod
-	def fromHandle(cls, handle):
+	def fromHandle(cls, handle, debug):
 		'''handle - uchwyt do pliku lub zasobu w sieci'''
 		object_dict={}
 		try:
@@ -59,7 +59,7 @@ class LittleParser(object):
 		object_dict['_za_ktorym_razem']=0
 		object_dict['_host']=[]
 		# file is empty - throws XMLSyntaxError
-		seq = _parse(handle)  # object_dict.update(_parse(handle))
+		seq = _parse(handle, debug)  # object_dict.update(_parse(handle))
 		# try:
 		# 	seq = _parse(handle)#object_dict.update(_parse(handle))
 		# except Exception, e:
@@ -135,7 +135,7 @@ class LittleParser(object):
 		- new_host_id - prawidłowy gospodarz - jego id w bazie taksonomy'''
 		pass
 
-def _parse(handle):
+def _parse(handle, debug):
 	object_dict={}
 	print handle.name
 	gi = handle.name.rsplit('/',1)[1]
@@ -169,7 +169,7 @@ def _parse(handle):
 	else:
 		pdb.set_trace()
 	#ssseq = None
-	ssseq = SeqRepresentation( uniSeq )
+	ssseq = SeqRepresentation( uniSeq, debug )
 	#open( '../prints/%s' %name, 'w' ).write( str(ssseq) )
 	
 	return ssseq
