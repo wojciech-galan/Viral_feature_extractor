@@ -74,3 +74,4 @@ if __name__ == "__main__":
 	findHost(term, ids, debug)
 	# TODO wyjebać printy z hostProcessing i findingRecords
 	# TODO niech loguje ID sekwencji, z którymi się coś nie udało
+    # TODO pliki w taxonomy zapisują się z nazwą jako lista. Do poprawienia
