@@ -71,5 +71,4 @@ if __name__ == "__main__":
     print ids, len(ids)
     socket.setdefaulttimeout(timeout)
     findHost(term, ids)
-    # TODO wyjebać adres mailowy z hostProcessing
     # TODO wyjebać printy z hostProcessing i findingRecords

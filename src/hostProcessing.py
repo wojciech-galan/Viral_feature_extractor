@@ -10,7 +10,6 @@ import re
 
 from Bio import Entrez
 import logging
-Entrez.email = 'wojciech.galan@gmail.com'
 from lxml import etree
 from daos import SpeciesDAO
 from entities import Species
@@ -196,7 +195,4 @@ def lineage(host_id, tax_directory=tax_dir):
 	return [ content[0]['ScientificName'] , content[0]['Lineage'] ]
 
 if __name__ == '__main__':
-	'''res = getAllHosts()
-	open( '../res', 'w' ).write( str(res) )'''
-	'''d = eval( open( '../res' ).read() )
-	putHostsInDb( d, clear = True )'''
+	pass

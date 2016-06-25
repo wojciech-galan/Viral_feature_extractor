@@ -73,7 +73,7 @@ def createDirIfNotExists(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
+def findHost(term, id_list, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
              improper_host_path=CONF['improper_host_path'], rettype='xml'):
     '''Argumenty:
     - term - to co dostajemy po termCreation
@@ -86,7 +86,6 @@ def findHost(term, id_list, directory="../cipa", seq_directory=CONF['seq_dir'], 
     seqs_without_host=[]
     seqs = []
     createEmptyFile(improper_host_path)
-    createDirIfNotExists(directory)
     createDirIfNotExists(tax_directory)
     createDirIfNotExists(seq_directory)
     #if not os.path.exists(seq_directory):
