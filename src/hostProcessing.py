@@ -53,7 +53,8 @@ def getAllHosts():
 		host_id = id_list[0]
 		res = lineage(host_id)
 		if not res:
-			id_list.remove(host_id)  # pdb.set_trace()
+			id_list.remove(host_id)
+			pdb.set_trace() #TODO dążyć do wyjebania tego
 			continue
 		print len(id_list), res
 		ret_dict[host_id] = res
@@ -176,8 +177,13 @@ def lineage(host_id, tax_directory=tax_dir):
 	# pdb.set_trace()
 	tax_path = os.path.join(tax_directory, host_id)
 	if os.path.exists(tax_path):
-		handle = open(tax_path)
-		content = Entrez.read(handle)
+		with open(tax_path) as handle:
+			try:
+				content = Entrez.read(handle)
+			except Entrez.Parser.NotXMLError, e:
+				logger.debug(e)
+				os.remove(tax_path)
+				return lineage(host_id, tax_directory)
 	else:
 		while True:
 			try:
@@ -206,4 +212,14 @@ def lineage(host_id, tax_directory=tax_dir):
 
 
 if __name__ == '__main__':
-	pass
+	import socket
+	import argparse
+	parser = argparse.ArgumentParser(description='Short sample description')
+	parser.add_argument('--email', action="store")
+	parser.add_argument('--timeout', action="store", type=int)
+	result = parser.parse_args()
+	Entrez.email=result.email
+	timeout = result.timeout
+	hosts = getAllHosts()
+	socket.setdefaulttimeout(timeout)
+	putHostsInDb(hosts, True)

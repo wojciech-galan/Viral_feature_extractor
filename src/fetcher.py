@@ -39,7 +39,7 @@ logging.basicConfig(level=logging.DEBUG,
 if __name__ == "__main__":
 	import sys
 
-	print sys.argv
+	print sys.argv #TODO do wyjebania
 	logger = logging.getLogger(os.path.basename(__file__))
 	parser = argparse.ArgumentParser(description='Short sample description')
 	parser.add_argument('--email', action="store")
@@ -71,4 +71,7 @@ if __name__ == "__main__":
 	socket.setdefaulttimeout(timeout)
 	findHost(term, ids, debug)
 	# TODO niech loguje ID sekwencji, z którymi się coś nie udało
-	# TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów
+	# TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów. - doing
+	# TODO - sprawdzić, czy potem w miarę szybko jest dostęp do tych danych
+	# TODO porównać profilerem, jak to wygląda czasowo dla jednego profilu robionego wcześniej, a drugiego w locie
+	# TODO czy działa pod windą?
