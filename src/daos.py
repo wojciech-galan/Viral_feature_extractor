@@ -142,7 +142,7 @@ class DataAccessor(object):
 class SpeciesDAO( DataAccessor ):
 	'''Klasa dostępu do danych z NCBI Taxonomy'''
 	
-	def __init__( self, db_path=database_path+'basic.db', echo=False ):
+	def __init__( self, db_path=os.path.join(database_path, 'basic.db'), echo=False ):
 		createFileIfNotExists( db_path )
 		super( SpeciesDAO, self ).__init__( db_path, echo=echo )
 		self.cur.execute( "CREATE TABLE IF NOT EXISTS Species( tax_id VARCHAR NOT NULL PRIMARY KEY, name VARCHAR NOT NULL, lineage VARCHAR NOT NULL );" )

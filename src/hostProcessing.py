@@ -129,7 +129,7 @@ def findHostInNCBITaxonomy(host_name, debug=True):
 			host_data[1] = host_data[1].split('; ')
 	else:
 		if debug:
-			open(bad_hosts_path, 'a').write('%s\n' % host_name)
+			logger.debug('findHostInNCBITaxonomy had problem with %s host name' % host_name)
 		return None  # TODO do poprawy
 	return host_data[1]  # to lineage
 
@@ -174,14 +174,15 @@ def lineage(host_id, tax_directory=tax_dir):
 	'''Bierze ID gatunku z bazy NCBi taxonomy.
 	Zwraca krotkę ( name, lineage )'''
 	# pdb.set_trace()
-	if host_id in os.listdir(tax_directory):
-		handle = open("%s%s" % (tax_directory, host_id))
+	tax_path = os.path.join(tax_directory, host_id)
+	if os.path.exists(tax_path):
+		handle = open(tax_path)
 		content = Entrez.read(handle)
 	else:
 		while True:
 			try:
 				handle = Entrez.efetch(db='taxonomy', id=host_id)
-				open("%s%s" % (tax_directory, host_id), 'w').write(handle.read())
+				open(tax_path, 'w').write(handle.read())
 				handle.close()
 			except (etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError), e:
 				logger.error(e)
@@ -189,12 +190,12 @@ def lineage(host_id, tax_directory=tax_dir):
 			except socket.timeout, e:
 				logger.error(e)
 				print e
-			handle = open("%s%s" % (tax_directory, host_id))
+			handle = open(tax_path)
 			try:
 				content = Entrez.read(handle)
 			except Entrez.Parser.NotXMLError, e:
 				logger.error(e)
-				os.remove("%s%s" % (tax_directory, host_id))
+				os.remove(tax_path)
 				continue
 			finally:
 				handle.close()

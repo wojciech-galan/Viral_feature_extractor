@@ -5,20 +5,25 @@ import os.path
 __author__="wojtek"
 __date__ ="$2012-08-20 09:26:10$"
 
-import os
+import os.path
+import json
 
 searchURL  = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
 fetchURL  = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
-parser_classes_dir = './parser_classes/'
-temp_dir='../temp_fetched_data/'
-res_dir='../fetched_data/'
-seq_dir = '../sequences/'
-tax_dir='../taxonomy/'
-pars_err_dir='../errors'
-bad_hosts_path = '../bad_host'
-database_path='..%sdatabases%s' %( os.sep, os.sep )
-containers_path='..%scontainers%s' %( os.sep, os.sep )
+DIR_NAME = os.path.split(os.path.dirname(__file__))[0]
+CONF_PATH = os.path.join(DIR_NAME, 'etc', 'conf.json')
+CONF = json.load(open(CONF_PATH))
+
+parser_classes_dir = os.path.join(os.path.dirname(__file__), 'parser_classes')
+# temp_dir='../temp_fetched_data/'
+# res_dir='../fetched_data/'
+seq_dir = os.path.join(DIR_NAME, 'sequences')
+tax_dir = os.path.join(DIR_NAME, 'taxonomy')
+# pars_err_dir='../errors'
+# bad_hosts_path = '../bad_host'
+database_path=os.path.join(DIR_NAME, 'databases')
+containers_path=os.path.join(DIR_NAME, 'containers')
 
 strange_orgname='dziwna budowa orgname w tym pliku'
 
@@ -48,3 +53,6 @@ any_codon_code = 'x'
 #zdefiniowane w razie potrzeby dzielenia przez zero - co zwrócić
 RSCU_ZERO = 0
 CAI_ZERO = 0
+
+if __name__ == '__main__':
+	print DIR_NAME

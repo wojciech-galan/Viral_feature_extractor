@@ -20,7 +20,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>"""
 
-import json
 import logging
 import argparse
 import socket
@@ -28,14 +27,13 @@ import socket
 from Bio import Entrez
 from findingRecords import *
 
-CONF = json.load(open("../etc/conf.json"))
-filename = os.path.join(os.path.dirname(__file__), CONF['log_file'])
+log_filename= os.path.join(os.path.dirname(__file__), CONF['log_file'])
 
 
 logging.basicConfig(level=logging.DEBUG,
 					format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
 					datefmt='%m-%d %H:%M',
-					filename=filename,
+					filename=log_filename,
 					filemode='w')
 
 if __name__ == "__main__":

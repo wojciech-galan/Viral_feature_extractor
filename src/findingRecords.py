@@ -20,7 +20,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>"""
 
-import json
 import os
 import time
 import pdb
@@ -37,8 +36,8 @@ from Bio import Entrez
 
 from LittleParser import LittleParser
 from simple_classes import UnexpectedValueException
+from constants import *
 
-CONF = json.load(open("../etc/conf.json"))
 logger = logging.getLogger(os.path.basename(__file__))
 
 def findRecords(term, database, debug=False, retmax=0):
@@ -104,7 +103,6 @@ def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=
 				print handle.geturl()
 				with open(path, 'w') as file_handle:
 					file_handle.write(handle.read())
-				print "written on disk"
 			except (urllib2.URLError, socket.timeout, socket.error), e:
 				logger.error(e)
 				print e
@@ -128,10 +126,10 @@ def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=
 		#except (Entrez.Parser.NotXMLError, httplib.IncompleteRead):
 		except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError ), e:
 			#raise
-			print "Parsing error while parsing %s%s"%(seq_directory, id_)
+			print "Parsing error while parsing %s"%path
 			logger.error(e)
 			try:
-				os.remove(os.path.join(seq_directory, id_))
+				os.remove(path)
 			except (IOError, OSError), er:
 				logger.info(er)
 			#dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)

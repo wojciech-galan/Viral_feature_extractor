@@ -31,7 +31,7 @@ class Container( object ):
 	
 	@classmethod
 	def fromFile( cls, f_name ):
-		with open( '%s%s' %(containers_path, f_name), 'rb' ) as f:
+		with open( os.path.join(containers_path, f_name), 'rb' ) as f:
 			obj = pickle.load( f )
 		return obj
 		# jak nie podziała - patrz tu: http://stackoverflow.com/questions/19305296/multiple-constructors-in-python-using-inheritance
@@ -80,7 +80,7 @@ class Container( object ):
 					f_name = '%s_%d' %( self.created, v+1 )
 			else:
 				proper_name = True
-		with open( '%s%s' %(containers_path, f_name), 'wb' ) as f:
+		with open( os.path.join(containers_path, f_name), 'wb' ) as f:
 			pickle.dump( self, f, pickle.HIGHEST_PROTOCOL )
 	
 	def getDsRNAViruses( self ):
