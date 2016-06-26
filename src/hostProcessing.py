@@ -214,6 +214,12 @@ def lineage(host_id, tax_directory=tax_dir):
 if __name__ == '__main__':
 	import socket
 	import argparse
+	log_filename= os.path.join(os.path.dirname(__file__), CONF['log_file'])
+	logging.basicConfig(level=logging.DEBUG,
+						format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+						datefmt='%m-%d %H:%M',
+						filename=log_filename,
+						filemode='w')
 	parser = argparse.ArgumentParser(description='Short sample description')
 	parser.add_argument('--email', action="store")
 	parser.add_argument('--timeout', action="store", type=int)
