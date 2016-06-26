@@ -28,8 +28,6 @@ def getHostNames():
 
 ###########################################################		uwaga!!!! stała!!!! 	###########################################
 HOST_NAMES = tuple(getHostNames())
-
-
 ###########################################################			koniec!!!!		 	###########################################
 
 
@@ -126,7 +124,7 @@ def findHostInNCBITaxonomy(host_name, debug=True):
 			host_data = [species.name, species.lineage]
 		else:
 			# pdb.set_trace()
-			host_data = lineage(id_list)
+			host_data = lineage(id_list[0])
 			SpeciesDAO().create(Species.fromStrings(id_list[0], host_data[0], host_data[1]))
 			host_data[1] = host_data[1].split('; ')
 	else:
@@ -136,7 +134,7 @@ def findHostInNCBITaxonomy(host_name, debug=True):
 	return host_data[1]  # to lineage
 
 
-def findHostLineage(host_name, debug=True): #TODO debug pobrać z wyżej
+def findHostLineage(host_name, debug=True):
 	'''szuka danych organizmu ( lineage ) na podstawie nazwy podanej przez użytkownika'''
 	# najpierw sprawdzamy, czy nazwa podana przez usera jest w słowniku
 	if host_name.lower() in species_dict:
@@ -181,7 +179,6 @@ def lineage(host_id, tax_directory=tax_dir):
 		content = Entrez.read(handle)
 	else:
 		while True:
-			print "in loop"
 			try:
 				handle = Entrez.efetch(db='taxonomy', id=host_id)
 				open("%s%s" % (tax_directory, host_id), 'w').write(handle.read())

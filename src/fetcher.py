@@ -64,7 +64,7 @@ if __name__ == "__main__":
 	control=1
 	while control:
 		try:
-			ids=findRecords(term, "nuccore", result.d)
+			ids=findRecords(term, "nuccore", debug)
 			control=0
 		except IOError, e:
 			logger.error(e)
@@ -72,6 +72,5 @@ if __name__ == "__main__":
 	print ids, len(ids)
 	socket.setdefaulttimeout(timeout)
 	findHost(term, ids, debug)
-	# TODO wyjebać printy z hostProcessing i findingRecords
 	# TODO niech loguje ID sekwencji, z którymi się coś nie udało
-    # TODO pliki w taxonomy zapisują się z nazwą jako lista. Do poprawienia
+	# TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów

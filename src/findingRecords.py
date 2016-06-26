@@ -43,8 +43,8 @@ logger = logging.getLogger(os.path.basename(__file__))
 
 def findRecords(term, database, debug=False, retmax=0):
 	# if retmax==0 - dostajemy wszystkie rekordy
-	if debug:
-		return ['985485914', '1013949532', '1013949529', '1013949526']
+	# if debug:
+	# 	return ['985485914', '1013949532', '1013949529', '1013949526']
 	if not retmax:
 		handle = Entrez.esearch(db=database, term=term)
 		record = Entrez.read(handle)
