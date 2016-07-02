@@ -159,7 +159,7 @@ def _parse(handle, debug):
 		try:
 			seq_entry_seq = StandaloneSeqEntrySeq(seq_entry_.seq_entry_seq_, gi)
 		except SeqEntrySeqException, sese:
-			pdb.set_trace()
+			logger.debug("While processing %s: %s"(str(sese), name))
 			print sese.message
 		# open( '../prints/%s' %name, 'w' ).write( str(seq_entry_seq) )
 		uniSeq = UnifiedSeq(seq_entry_seq)

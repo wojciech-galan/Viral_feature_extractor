@@ -75,3 +75,6 @@ if __name__ == "__main__":
 	# TODO - sprawdzić, czy potem w miarę szybko jest dostęp do tych danych
 	# TODO porównać profilerem, jak to wygląda czasowo dla jednego profilu robionego wcześniej, a drugiego w locie
 	# TODO czy działa pod windą?
+	# TODO zastanowić się dobrze nad debugiem - kiedy to jest potrzebne
+	# może debug konkretnie dla takich plików, gdzie mogło coś nie pójść?
+	# TODO ustalić odpowiedzialność leveli - i skorzystać z flagi DEBUG

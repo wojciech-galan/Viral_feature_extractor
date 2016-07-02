@@ -7,6 +7,7 @@ import httplib
 import socket
 import urllib2
 import re
+import time
 
 from Bio import Entrez
 import logging
@@ -14,6 +15,7 @@ from lxml import etree
 from daos import SpeciesDAO
 from entities import Species
 
+import timeout
 from constants import *
 from species import species_dict
 
@@ -43,22 +45,23 @@ def getAllHosts():
 			handle = Entrez.esearch(db='taxonomy', term='species[rank] AND specified[prop]', retmax=retmax)
 			id_list = Entrez.read(handle)['IdList']
 			done = True
-		except URLError, e:
+		except urllib2.URLError, e:
 			logger.error(e)
 		finally:
-			handle.close()
+			try:
+				handle.close()
+			except UnboundLocalError:
+				pass
 	print len(id_list), retmax
 	ret_dict = {}
 	while id_list:
 		host_id = id_list[0]
 		res = lineage(host_id)
-		if not res:
-			id_list.remove(host_id)
-			pdb.set_trace() #TODO dążyć do wyjebania tego
+		id_list.remove(host_id)
+		if not res: # event already logged in function lineage
 			continue
 		print len(id_list), res
 		ret_dict[host_id] = res
-		id_list.remove(host_id)
 	return ret_dict
 
 
@@ -104,7 +107,6 @@ def findHostInNCBITaxonomy(host_name, debug=True):
 			handle = Entrez.esearch(db='taxonomy', term=host_name)
 			print "Looking for host in %s" % handle.geturl()
 			id_list = Entrez.read(handle)['IdList']
-			print "id_list fetched"
 			done = True
 		except Exception, e:
 			logger.error(e)
@@ -161,6 +163,8 @@ def findHostLineage(host_name, debug=True):
 		if ';' in host_name:
 			# pdb.set_trace()
 			return findHostLineage(host_name.split(';')[0].strip(), debug)
+		else:
+			logger.error("EROR while processing host_name %s" %host_name)
 	elif len(host_name.split()) > 1 and (host_name.endswith(' sp.') or host_name.endswith(' L.')):
 		# pdb.set_trace()
 		return findHostLineage(host_name[:-3].strip(), debug)
@@ -174,28 +178,34 @@ def findHostLineage(host_name, debug=True):
 def lineage(host_id, tax_directory=tax_dir):
 	'''Bierze ID gatunku z bazy NCBi taxonomy.
 	Zwraca krotkę ( name, lineage )'''
-	# pdb.set_trace()
+	# @timeout.timeout(timeout)
+	# def timeoutedEntrezRead(db, id_):
+	# 	handle = Entrez.efetch(db='taxonomy', id=id_)
+	# 	print handle.geturl()
+	# 	content = handle.read()
+	# 	handle.close()
+	# 	return content
 	tax_path = os.path.join(tax_directory, host_id)
 	if os.path.exists(tax_path):
 		with open(tax_path) as handle:
 			try:
 				content = Entrez.read(handle)
-			except Entrez.Parser.NotXMLError, e:
+			except (Entrez.Parser.NotXMLError, Entrez.Parser.CorruptedXMLError), e:
 				logger.debug(e)
 				os.remove(tax_path)
 				return lineage(host_id, tax_directory)
 	else:
 		while True:
 			try:
+				# content = timeoutedEntrezRead('taxonomy', host_id)
 				handle = Entrez.efetch(db='taxonomy', id=host_id)
-				open(tax_path, 'w').write(handle.read())
+				print handle.geturl()
+				content = handle.read()
+				open(tax_path, 'w').write(content)
 				handle.close()
-			except (etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError), e:
+			except (etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, socket.timeout), e:
 				logger.error(e)
 				continue
-			except socket.timeout, e:
-				logger.error(e)
-				print e
 			handle = open(tax_path)
 			try:
 				content = Entrez.read(handle)
@@ -206,8 +216,12 @@ def lineage(host_id, tax_directory=tax_dir):
 			finally:
 				handle.close()
 			break
-	if len(content) != 1:
-		return None  # pdb.set_trace()
+	if len(content) == 0:
+		logger.info("Didn't found anything in NCBI for host_id %s" %host_id)
+		return None
+	elif len(content) > 1:
+		logger.info("Strange content for host_id %s: %s" %(host_id, str(content)))
+		return None
 	return [content[0]['ScientificName'], content[0]['Lineage']]
 
 
@@ -226,6 +240,6 @@ if __name__ == '__main__':
 	result = parser.parse_args()
 	Entrez.email=result.email
 	timeout = result.timeout
-	hosts = getAllHosts()
 	socket.setdefaulttimeout(timeout)
+	hosts = getAllHosts()
 	putHostsInDb(hosts, True)

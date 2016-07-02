@@ -4,6 +4,7 @@
 import pdb
 
 import copy
+import logging
 
 from codonUsageBias import *
 from genetic_codes import *
@@ -16,6 +17,7 @@ from simple_classes import BaseXML, MyException
 from SeqEntrySeq import StandaloneSeqEntrySeq
 from SeqEntrySet import SeqEntrySet
 
+logger = logging.getLogger(__file__)
 
 class UnifiedSeq(BaseXML):
 	'''Klasa, która ma zbierać dane z obiektów typu SeqEntrySet i StandaloneSeqEntrySeq.
@@ -185,16 +187,19 @@ class SeqRepresentation(BaseXML):
 			self.molecule = acid_to_number[uniSeq.molecule]
 		else:
 			self.molecule = None
-			pdb.set_trace()
+			logger.info("For gi=%s molecule=%s" %(uniSeq.gi, uniSeq.molecule))
+			pdb.set_trace() #TODO wyjebać?
 		if uniSeq.seq:
 			self.length = len(uniSeq.seq)
 		else:
 			self.length = None
+			logger.info("For gi=%s lengt=%s" %(uniSeq.gi, uniSeq.lenght))
 		self.lineage = [s.strip() for s in uniSeq.lineage.split(';')]
 		if uniSeq.host:
 			self.host = uniSeq.host
 			self.host_lineage = findHostLineage(uniSeq.host, debug)
 		else:
+			logger.info("No host for %s" %uniSeq.gi)
 			self.host = None
 			self.host_lineage = None
 
@@ -206,6 +211,7 @@ class SeqRepresentation(BaseXML):
 			self.relative_nuc_frequencies_one_strand = None
 			self.relative_trinuc_freqs_one_strand = None
 			cd_regions = None
+			logger.info("No seq for %s" %uniSeq.gi)
 		else:
 			self.nuc_frequencies = nucFrequencies(uniSeq.seq, 2)
 			self.relative_nuc_frequencies_one_strand = relativeNucFrequencies(self.nuc_frequencies, 1)
@@ -218,12 +224,14 @@ class SeqRepresentation(BaseXML):
 			# print self.relative_nuc_frequencies
 			# pdb.set_trace()
 			else:
+				logger.info("For gi=%s strand=%s" %(uniSeq.gi, uniSeq.strand))
 				self.relative_nuc_frequencies = None
 				self.relative_trinuc_freqs = None
 			cd_regions = uniSeq.getCdRegions()
 
 		# liczenie codon usage bias
 		if not cd_regions:
+			logger.info("No cd_regions for %s" %uniSeq.gi)
 			self.avg_rscu_all = None
 			self.std_rscu_all = None
 			self.avg_cai_all = None
@@ -265,8 +273,9 @@ class SeqRepresentation(BaseXML):
 			elif cd_region.frame == 'three':
 				codon_usage = codons(cd_region.seq[2:])
 			else:
-				pdb.set_trace()
-			if not cd_region.prod_id:
+				logger.info("For gi=%s cd_region.frame=%s" %(uniSeq.gi, cd_region.frame))
+				pdb.set_trace() # TODO wyjebać?
+			if not cd_region.prod_id: #TODO what?
 				cd_region.prod_id = 'no_id_%d' % none_prod_id
 				none_prod_id += 1
 			seq_rscu[cd_region.prod_id] = rscu(codon_usage, eval('gencode_SG%s' % cd_region.code))
