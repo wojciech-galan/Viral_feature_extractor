@@ -175,7 +175,7 @@ def findHostLineage(host_name, debug=True):
     # TODO logowanie, gdy tu coś pójdzie nie tak
 
 
-def lineage(host_id, tax_directory=tax_dir):
+def lineage(host_id, tax_directory):
 	'''Bierze ID gatunku z bazy NCBi taxonomy.
 	Zwraca krotkę ( name, lineage )'''
 	# @timeout.timeout(timeout)
@@ -186,7 +186,7 @@ def lineage(host_id, tax_directory=tax_dir):
 	# 	handle.close()
 	# 	return content
 	tax_path = os.path.join(tax_directory, host_id)
-	if os.path.exists(tax_path):
+	try:# os.path.exists(tax_path):
 		with open(tax_path) as handle:
 			try:
 				content = Entrez.read(handle)
@@ -194,7 +194,7 @@ def lineage(host_id, tax_directory=tax_dir):
 				logger.debug(e)
 				os.remove(tax_path)
 				return lineage(host_id, tax_directory)
-	else:
+	except IOError: #file doesn't exist
 		while True:
 			try:
 				# content = timeoutedEntrezRead('taxonomy', host_id)

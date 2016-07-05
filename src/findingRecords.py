@@ -72,8 +72,8 @@ def createDirIfNotExists(path):
 	if not os.path.exists(path):
 		os.makedirs(path)
 
-def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
-			 improper_host_path=CONF['improper_host_path'], rettype='xml'):
+def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
+			 improper_host_path=CONF['improper_host_path'], processed_seq_directory=CONF['processed_seq_dir'], rettype='xml'):
 	'''Argumenty:
 	- term - to co dostajemy po termCreation
 	- ids - lista identyfikatorow sekwencji z bazy nuccore
@@ -81,12 +81,14 @@ def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=
 	- directory - w którym folderze ma być to zapisywane
 	- seq_directory - folder na pliki xml z sekwencjami
 	- tex_directory - folder na pliki xml z bazy taxonomy'''
-	seqs_with_host=[]
-	seqs_without_host=[]
 	seqs = []
-	createEmptyFile(improper_host_path)
+	#createEmptyFile(improper_host_path)
+	tax_directory = os.path.join(out_dir, tax_directory)
+	seq_directory = os.path.join(out_dir, seq_directory)
+	processed_seq_directory = os.path.join(out_dir, processed_seq_directory)
 	createDirIfNotExists(tax_directory)
 	createDirIfNotExists(seq_directory)
+	createDirIfNotExists(processed_seq_directory)
 	#if not os.path.exists(seq_directory):
 	#    os.mkdir(containers_path)
 	# try:
@@ -97,6 +99,7 @@ def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=
 		print '%s ids left'%len(id_list)
 		id_ = id_list[0]
 		path = os.path.join(seq_directory, id_)
+		processed_path = os.path.join(processed_seq_directory, id_)
 		while not os.path.exists(path):
 			try:
 				handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
@@ -112,9 +115,14 @@ def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=
 				logger.info(e)
 				return
 		try:
-			with open(path) as handle:
-				seq=LittleParser.fromHandle(handle, debug)
-				seqs.append( seq )
+			if os.path.exists(processed_path):
+				pass # TODO napisać seqs.append(open(processed_path))
+			else:
+				with open(path) as handle:
+					seq=LittleParser.fromHandle(handle, debug)
+					seqs.append(seq)
+					open(processed_path, 'w').write(str(seq))
+			seqs.append(seq)
 			id_list.remove(id_)
 		except (KeyboardInterrupt, SystemExit), e:
 			logger.info(e)
@@ -140,20 +148,12 @@ def findHost(term, id_list, debug, seq_directory=CONF['seq_dir'], tax_directory=
 			# should be RuntimeError
 			time.sleep(1)
 		finally:
-			handle.close()
-			#raise
-	#print countProper(), 'proper sequences'
+			try:
+				handle.close()
+			except UnboundLocalError:
+				pass
 
-	# part_name=term+'_'+dateTime()
-	# host_fname=toFileName(part_name)+'_host.dump'
-	# no_host_fname=toFileName(part_name)+'_no_host.dump'
-	# ids_left_fname=toFileName(part_name)+'_ids_left.dump'
-	#
-	# #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, directory)
-	# #shutil.rmtree(temp_directory)
-	# difflist = [ x for x in os.listdir(seq_directory) if x not in os.listdir( '../prints' ) ]
-	# open( '../seqs', 'w' ).write( '\n\n'.join( [str(s) for s in seqs] ) )
-	# open( '../prints/diff', 'w' ).write( '\n'.join( difflist ) )
+
 	# container = Container( seqs )
 	# container.save()
 	return id_list

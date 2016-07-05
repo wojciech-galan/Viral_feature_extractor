@@ -18,12 +18,12 @@ CONF = json.load(open(CONF_PATH))
 parser_classes_dir = os.path.join(os.path.dirname(__file__), 'parser_classes')
 # temp_dir='../temp_fetched_data/'
 # res_dir='../fetched_data/'
-seq_dir = os.path.join(DIR_NAME, 'sequences')
-tax_dir = os.path.join(DIR_NAME, 'taxonomy')
+# seq_dir = os.path.join(DIR_NAME, 'sequences')
+# tax_dir = os.path.join(DIR_NAME, 'taxonomy')
 # pars_err_dir='../errors'
 # bad_hosts_path = '../bad_host'
 database_path=os.path.join(DIR_NAME, 'databases')
-containers_path=os.path.join(DIR_NAME, 'containers')
+# containers_path=os.path.join(DIR_NAME, 'containers')
 
 strange_orgname='dziwna budowa orgname w tym pliku'
 

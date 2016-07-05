@@ -26,6 +26,7 @@ import socket
 
 from Bio import Entrez
 from findingRecords import *
+from SeqContainer import Container
 
 log_filename= os.path.join(os.path.dirname(__file__), CONF['log_file'])
 
@@ -37,20 +38,21 @@ logging.basicConfig(level=logging.DEBUG,
 					filemode='w')
 
 if __name__ == "__main__":
-	import sys
-
-	print sys.argv #TODO do wyjebania
 	logger = logging.getLogger(os.path.basename(__file__))
 	parser = argparse.ArgumentParser(description='Short sample description')
 	parser.add_argument('--email', action="store")
 	parser.add_argument('--timeout', action="store", type=int)
+	parser.add_argument('--output', action="store", default=os.path.split(os.path.dirname(__file__))[0])
+	parser.add_argument('--container', action="store", default='container.dump')
 	# "d" stands for "debug"
 	parser.add_argument('-d', action="store_true", default=False)
 	result = parser.parse_args()
 	print result
 	Entrez.email=result.email
 	timeout = result.timeout
+	out_dir = os.path.expanduser(result.output)
 	debug = result.d
+	container_path = os.path.join(out_dir, result.container)
 	#term = termCreation('complete', 'title', 'refseq', 'viruses')
 	#print term
 	# term na podstawie http://www.ncbi.nlm.nih.gov/genomes/GenomesHome.cgi?taxid=10239&hopt=faq#retrieve%20refseq
@@ -67,9 +69,16 @@ if __name__ == "__main__":
 		except IOError, e:
 			logger.error(e)
 			print e
-	print ids, len(ids)
 	socket.setdefaulttimeout(timeout)
-	findHost(term, ids, debug)
+	if os.path.exists(container_path):
+		container = Container.fromFile(container_path)
+		already_done = container.getIds()
+		ids = [id_ for id_ in ids if id_ not in already_done]
+		seq_representations = container.seqs
+	else:
+		seq_representations = []
+	seq_representations.extend(findHost(term, ids, out_dir, debug))
+	Container(seq_representations).save(container_path)
 	# TODO niech loguje ID sekwencji, z którymi się coś nie udało
 	# TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów. - doing
 	# TODO - sprawdzić, czy potem w miarę szybko jest dostęp do tych danych

@@ -12,8 +12,8 @@ from constants import *
 from UnifiedSeq import SeqRepresentation
 from commonFunctions import dateTime
 
-['environmental samples', 'unclassified viruses', 'dsRNA viruses', 'dsDNA viruses, no RNA stage', 'unassigned ssRNA viruses', 'ssRNA negative-strand viruses', 'ssRNA positive-strand viruses, no DNA stage', 'unclassified ssRNA viruses', 'ssDNA viruses', 'unassigned viruses', 'unclassified phages', 'Satellites', 'unclassified archaeal viruses', 'Retro-transcribing viruses', 'unclassified virophages', 'Virus-associated RNAs', 'Deltavirus']
-['environmental samples', 'unclassified viruses', 'unassigned viruses', 'unclassified phages', 'Satellites', 'unclassified archaeal viruses', 'unclassified virophages', 'Virus-associated RNAs', 'Deltavirus']
+# ['environmental samples', 'unclassified viruses', 'dsRNA viruses', 'dsDNA viruses, no RNA stage', 'unassigned ssRNA viruses', 'ssRNA negative-strand viruses', 'ssRNA positive-strand viruses, no DNA stage', 'unclassified ssRNA viruses', 'ssDNA viruses', 'unassigned viruses', 'unclassified phages', 'Satellites', 'unclassified archaeal viruses', 'Retro-transcribing viruses', 'unclassified virophages', 'Virus-associated RNAs', 'Deltavirus']
+# ['environmental samples', 'unclassified viruses', 'unassigned viruses', 'unclassified phages', 'Satellites', 'unclassified archaeal viruses', 'unclassified virophages', 'Virus-associated RNAs', 'Deltavirus']
 
 class Container( object ):
 	'''Kontener reprezentacji sekwencji'''
@@ -23,15 +23,16 @@ class Container( object ):
 			- seq_representations - lista/krotka obiektów typu SeqRepresentation
 			- created - kiedy został utworzony'''
 		super( Container, self ).__init__()
-		self.seqs = seq_representations
-		if created:
-			self.created = created
-		else:
-			self.created = dateTime()
+		self.seqs = copy.deepcopy(seq_representations)
+		# if created:
+		# 	self.created = created
+		# else:
+		# 	self.created = dateTime()
+		self.created = dateTime()
 	
 	@classmethod
-	def fromFile( cls, f_name ):
-		with open( os.path.join(containers_path, f_name), 'rb' ) as f:
+	def fromFile( cls, path ):
+		with open( path, 'rb' ) as f:
 			obj = pickle.load( f )
 		return obj
 		# jak nie podziała - patrz tu: http://stackoverflow.com/questions/19305296/multiple-constructors-in-python-using-inheritance
@@ -68,20 +69,24 @@ class Container( object ):
 				ret.append( copy.deepcopy( seq ) )
 		return Container( ret, self.created )
 	
-	def save( self, name='' ):
-		proper_name = False
-		f_name = self.created + '_' + name
-		while not proper_name:
-			if f_name in os.listdir( containers_path ):
-				if f_name == self.created:
-					f_name = self.created + '_1'
-				else:
-					v = int( f_name.split('_')[1] )
-					f_name = '%s_%d' %( self.created, v+1 )
-			else:
-				proper_name = True
-		with open( os.path.join(containers_path, f_name), 'wb' ) as f:
-			pickle.dump( self, f, pickle.HIGHEST_PROTOCOL )
+	# def save( self, name='' ):
+	# 	proper_name = False
+	# 	f_name = self.created + '_' + name
+	# 	while not proper_name:
+	# 		if f_name in os.listdir( containers_path ):
+	# 			if f_name == self.created:
+	# 				f_name = self.created + '_1'
+	# 			else:
+	# 				v = int( f_name.split('_')[1] )
+	# 				f_name = '%s_%d' %( self.created, v+1 )
+	# 		else:
+	# 			proper_name = True
+	# 	with open( os.path.join(containers_path, f_name), 'wb' ) as f:
+	# 		pickle.dump( self, f, pickle.HIGHEST_PROTOCOL )
+
+	def save(self, path):
+		with open(path, 'wb') as f:
+			pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
 	
 	def getDsRNAViruses( self ):
 		return Container([ x for x in self.seqs if x.lineage[1]=='dsRNA viruses' ], self.created )
@@ -131,6 +136,9 @@ class Container( object ):
 	def getVirusesWithHost( self ):
 		'''Pobiera tylko wirusy z not None polem Host'''
 		return Container([ x for x in self.seqs if x.host ])
+
+	def getIds(self):
+		return [seq.gi for seq in self]
 
 if __name__ == '__main__':
 	pass

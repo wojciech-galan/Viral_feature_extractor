@@ -48,7 +48,7 @@ class BaseXML(object):
 				continue
 			elif key == 'text':
 				root.text = val
-			elif type(val) == bool or type(val) == str or not val:
+			elif type(val) == bool or type(val) == str or type(val) == unicode or not val:
 				child = etree.SubElement(root, key)
 				child.text = str(val)
 			elif type(val) == list or type(val) == tuple:
@@ -94,6 +94,10 @@ class BaseXML(object):
 		# print etree.tostring( root, pretty_print=True )
 		# pdb.set_trace()
 		return root
+
+	@classmethod
+	def fromString(cls, string):
+		raise NotImplementedError('Not implemented yet')
 
 	def __repr__(self):
 		return etree.tostring(self.toXML(), pretty_print=True)
@@ -371,13 +375,4 @@ class Date(AType):
 
 
 if __name__ == '__main__':
-	'''a=ID(1)
-	#print a
-	b=SeqId(2)
-	print b
-	bo=Bounds(3,4)
-	print bo.FROM
-	r=Region(5,6,'+')
-	print r.orientation
-	f=Feature.fromRegion(r)
-	print f.FROM'''
+

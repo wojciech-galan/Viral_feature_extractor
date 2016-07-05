@@ -5,7 +5,6 @@ from lxml import etree
 
 from simple_classes import BaseXML, DictContainsInterface
 
-from constants import seq_dir
 import pdb
 
 class Pubdesc_seq_raw_( BaseXML, DictContainsInterface ):

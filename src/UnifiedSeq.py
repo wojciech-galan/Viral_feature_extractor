@@ -193,7 +193,7 @@ class SeqRepresentation(BaseXML):
 			self.length = len(uniSeq.seq)
 		else:
 			self.length = None
-			logger.info("For gi=%s lengt=%s" %(uniSeq.gi, uniSeq.lenght))
+			logger.info("For gi=%s lengt=%s" %(uniSeq.gi, self.length))
 		self.lineage = [s.strip() for s in uniSeq.lineage.split(';')]
 		if uniSeq.host:
 			self.host = uniSeq.host
@@ -437,6 +437,12 @@ class SeqRepresentation(BaseXML):
 		# pdb.set_trace()
 		# print self
 		# pdb.set_trace()
+
+	@classmethod
+	def fromString(cls, string):
+		# super(SeqRepresentation, cls).__init__()
+		# super(SeqRepresentation, cls).fromString(string)
+		raise NotImplementedError('Not implemented yet')
 
 
 class NoSequenceException(MyException):
