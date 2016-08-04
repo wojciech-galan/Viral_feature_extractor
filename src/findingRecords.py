@@ -100,6 +100,7 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
 		id_ = id_list[0]
 		path = os.path.join(seq_directory, id_)
 		processed_path = os.path.join(processed_seq_directory, id_)
+		# ściągnięcie pliku
 		while not os.path.exists(path):
 			try:
 				handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
@@ -110,19 +111,17 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
 				logger.error(e)
 				print e
 				time.sleep(1)
-			except (KeyboardInterrupt, SystemExit), e:
-				#dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
-				logger.info(e)
-				return
+		# parsowanie pliku i wyłuskiwanie cech
 		try:
+			# seq - obiekt typu SequenceRepresentation
 			if os.path.exists(processed_path):
-				pass # TODO napisać seqs.append(open(processed_path))
+				seq = pickle.load(open(processed_path))
 			else:
 				with open(path) as handle:
 					seq=LittleParser.fromHandle(handle, debug)
-					seqs.append(seq)
-					open(processed_path, 'w').write(str(seq))
-			seqs.append(seq)
+					pickle.dump(seq, open(processed_path, 'w'), pickle.HIGHEST_PROTOCOL)
+					#open(processed_path, 'w').write(str(seq))
+				seqs.append(seq)
 			id_list.remove(id_)
 		except (KeyboardInterrupt, SystemExit), e:
 			logger.info(e)
