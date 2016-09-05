@@ -110,7 +110,6 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
 			except (urllib2.URLError, socket.timeout, socket.error), e:
 				logger.error(e)
 				print e
-				raise
 				time.sleep(1)
 		# parsowanie pliku i wyłuskiwanie cech
 		try:
