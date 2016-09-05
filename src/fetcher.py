@@ -71,7 +71,7 @@ if __name__ == "__main__":
 			logger.error(e)
 			print e
 	socket.setdefaulttimeout(timeout)
-	tax_dir = os.path.join(os.path.dirname(__file__), CONF['taxonomy_dir'])
+	tax_dir = os.path.join(out_dir, CONF['taxonomy_dir'])
 	if os.path.exists(container_path):
 		container = Container.fromFile(container_path)
 		already_done = container.getIds()

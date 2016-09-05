@@ -137,7 +137,7 @@ def findHostInNCBITaxonomy(host_name, tax_dir, debug=True):
 	return host_data[1]  # to lineage
 
 
-def findHostLineage(host_name, tax_dir=CONF['taxonomy_dir'], debug=True):
+def findHostLineage(host_name, tax_dir, debug=True):
 	'''szuka danych organizmu ( lineage ) na podstawie nazwy podanej przez użytkownika'''
 	# najpierw sprawdzamy, czy nazwa podana przez usera jest w słowniku
 	if host_name.lower() in species_dict:

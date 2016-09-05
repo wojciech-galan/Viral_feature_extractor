@@ -197,7 +197,7 @@ class SeqRepresentation(BaseXML):
 		self.lineage = [s.strip() for s in uniSeq.lineage.split(';')]
 		if uniSeq.host:
 			self.host = uniSeq.host
-			self.host_lineage = findHostLineage(uniSeq.host, debug=debug)
+			self.host_lineage = findHostLineage(uniSeq.host, taxonomy_dir, debug=debug)
 		else:
 			logger.info("No host for %s" %uniSeq.gi)
 			self.host = None
