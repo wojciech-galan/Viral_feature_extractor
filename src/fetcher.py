@@ -71,6 +71,7 @@ if __name__ == "__main__":
 			logger.error(e)
 			print e
 	socket.setdefaulttimeout(timeout)
+	tax_dir = os.path.join(os.path.dirname(__file__), CONF['taxonomy_dir'])
 	if os.path.exists(container_path):
 		container = Container.fromFile(container_path)
 		already_done = container.getIds()
@@ -78,7 +79,7 @@ if __name__ == "__main__":
 		seq_representations = container.seqs
 	else:
 		seq_representations = []
-	seq_representations.extend(findHost(term, ids, out_dir, debug))
+	seq_representations.extend(findHost(term, ids, out_dir, debug, tax_directory=tax_dir))
 	Container(seq_representations).save(container_path)
 	# TODO niech loguje ID sekwencji, z którymi się coś nie udało
 	# TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów. - doing

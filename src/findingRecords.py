@@ -119,7 +119,7 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
 				seq = pickle.load(open(processed_path))
 			else:
 				with open(path) as handle:
-					seq=LittleParser.fromHandle(handle, debug)
+					seq=LittleParser.fromHandle(handle, tax_directory, debug)
 					pickle.dump(seq, open(processed_path, 'w'), pickle.HIGHEST_PROTOCOL)
 					#open(processed_path, 'w').write(str(seq))
 				seqs.append(seq)

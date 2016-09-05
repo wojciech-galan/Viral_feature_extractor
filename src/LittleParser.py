@@ -38,7 +38,7 @@ class LittleParser(object):
 		return cls(**object_dict)
 
 	@classmethod
-	def fromHandle(cls, handle, debug):
+	def fromHandle(cls, handle, taxonomy_dir, debug):
 		'''handle - uchwyt do pliku lub zasobu w sieci'''
 		object_dict = {}
 		try:
@@ -60,7 +60,7 @@ class LittleParser(object):
 		object_dict['_za_ktorym_razem'] = 0
 		object_dict['_host'] = []
 		# file is empty - throws XMLSyntaxError
-		seq = _parse(handle, debug)  # object_dict.update(_parse(handle))
+		seq = _parse(handle, taxonomy_dir, debug)  # object_dict.update(_parse(handle))
 		# try:
 		# 	seq = _parse(handle)#object_dict.update(_parse(handle))
 		# except Exception, e:
@@ -140,7 +140,7 @@ class LittleParser(object):
 		pass
 
 
-def _parse(handle, debug):
+def _parse(handle, taxonomy_dir, debug):
 	object_dict = {}
 	print handle.name
 	gi = handle.name.rsplit('/', 1)[1]
@@ -171,7 +171,7 @@ def _parse(handle, debug):
 	else:
 		pdb.set_trace()
 	# ssseq = None
-	ssseq = SeqRepresentation(uniSeq, debug)
+	ssseq = SeqRepresentation(uniSeq, taxonomy_dir, debug)
 	# open( '../prints/%s' %name, 'w' ).write( str(ssseq) )
 
 	return ssseq

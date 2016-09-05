@@ -167,7 +167,7 @@ class SimpleCdRegion(BaseXML):
 class SeqRepresentation(BaseXML):
 	'''Klasa licząca współczynniki, które będą potem używane przez AI'''
 
-	def __init__(self, uniSeq, debug):
+	def __init__(self, uniSeq, taxonomy_dir, debug):
 		'''Argumenty:
 			- uniSeq - obiekt typu UnifiedSequence'''
 		super(SeqRepresentation, self).__init__()
@@ -197,7 +197,7 @@ class SeqRepresentation(BaseXML):
 		self.lineage = [s.strip() for s in uniSeq.lineage.split(';')]
 		if uniSeq.host:
 			self.host = uniSeq.host
-			self.host_lineage = findHostLineage(uniSeq.host, debug)
+			self.host_lineage = findHostLineage(uniSeq.host, debug=debug)
 		else:
 			logger.info("No host for %s" %uniSeq.gi)
 			self.host = None
