@@ -103,13 +103,14 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
 		# ściągnięcie pliku
 		while not os.path.exists(path):
 			try:
-				handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="text")
+				handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="xml")
 				print handle.geturl()
 				with open(path, 'w') as file_handle:
 					file_handle.write(handle.read())
 			except (urllib2.URLError, socket.timeout, socket.error), e:
 				logger.error(e)
 				print e
+				raise
 				time.sleep(1)
 		# parsowanie pliku i wyłuskiwanie cech
 		try:
