@@ -48,7 +48,7 @@ if __name__ == "__main__":
 	# "d" stands for "debug"
 	parser.add_argument('-d', action="store_true", default=False)
 	result = parser.parse_args()
-	print result
+	#print result
 	Entrez.email=result.email
 	timeout = result.timeout
 	out_dir = os.path.expanduser(result.output)
