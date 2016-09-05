@@ -154,25 +154,24 @@ def _parse(handle, taxonomy_dir, debug):
 
 	seq_entry_ = root.bioseq_set_seq_set__.seq_entry_[0]
 
-	name = handle.name.rsplit('/', 1)[1]
 	if 'seq_entry_seq_' in seq_entry_:
 		try:
 			seq_entry_seq = StandaloneSeqEntrySeq(seq_entry_.seq_entry_seq_, gi)
 		except SeqEntrySeqException, sese:
-			logger.debug("While processing %s: %s"(str(sese), name))
+			logger.debug("While processing %s: %s"(str(sese), gi))
 			print sese.message
-		# open( '../prints/%s' %name, 'w' ).write( str(seq_entry_seq) )
+		# open( '../prints/%s' %gi, 'w' ).write( str(seq_entry_seq) )
 		uniSeq = UnifiedSeq(seq_entry_seq)
 	elif 'seq_entry_set_' in seq_entry_:
 		seq_entry_set = SeqEntrySet(seq_entry_.seq_entry_set_, gi)
-		# open( '../prints/%s' %name, 'w' ).write( str(seq_entry_set) )
+		# open( '../prints/%s' %gi, 'w' ).write( str(seq_entry_set) )
 		# pdb.set_trace()
 		uniSeq = UnifiedSeq(seq_entry_set)
 	else:
 		pdb.set_trace()
 	# ssseq = None
 	ssseq = SeqRepresentation(uniSeq, taxonomy_dir, debug)
-	# open( '../prints/%s' %name, 'w' ).write( str(ssseq) )
+	# open( '../prints/%s' %gi, 'w' ).write( str(ssseq) )
 
 	return ssseq
 
