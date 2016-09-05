@@ -143,7 +143,7 @@ class LittleParser(object):
 def _parse(handle, taxonomy_dir, debug):
 	object_dict = {}
 	print handle.name
-	gi = handle.name.rsplit('/', 1)[1]
+	gi = os.path.basename(handle.name)
 	int(gi)  # upewniam się, że to zawsze będzie numer
 	root = processFile(handle)
 
