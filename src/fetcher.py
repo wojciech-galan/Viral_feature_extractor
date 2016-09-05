@@ -27,9 +27,10 @@ import socket
 from Bio import Entrez
 from findingRecords import *
 from SeqContainer import Container
+from commonFunctions import createDirIfNotExists
 
 log_filename= os.path.join(os.path.dirname(__file__), CONF['log_file'])
-
+createDirIfNotExists(os.path.dirname(os.path.abspath(log_filename)))
 
 logging.basicConfig(level=logging.DEBUG,
 					format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
@@ -41,7 +42,7 @@ if __name__ == "__main__":
 	logger = logging.getLogger(os.path.basename(__file__))
 	parser = argparse.ArgumentParser(description='Short sample description')
 	parser.add_argument('--email', action="store")
-	parser.add_argument('--timeout', action="store", type=int)
+	parser.add_argument('--timeout', action="store", type=int, default=5)
 	parser.add_argument('--output', action="store", default=os.path.split(os.path.dirname(__file__))[0])
 	parser.add_argument('--container', action="store", default='container.dump')
 	# "d" stands for "debug"
