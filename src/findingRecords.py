@@ -115,15 +115,16 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
         try:
             # seq - obiekt typu SequenceRepresentation
             if os.path.exists(processed_path):
-                eq = pickle.load(open(processed_path))
+                seq = pickle.load(open(processed_path))
             else:
                 with open(path) as handle:
                     seq=LittleParser.fromHandle(handle, tax_directory, debug)
                     pickle.dump(seq, open(processed_path, 'w'), pickle.HIGHEST_PROTOCOL)
                     #open(processed_path, 'w').write(str(seq))
-                seqs.append(seq) #TODO czy nie powinno być niezależnie od tego else?
+            seqs.append(seq)
             id_list.remove(id_)
-        except EOFError:
+        except EOFError, e:
+            logger.info(e)
             os.remove(processed_path)
         except (KeyboardInterrupt, SystemExit), e:
             logger.info(e)
@@ -157,4 +158,4 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
 
     # container = Container( seqs )
     # container.save()
-    return id_list
+    return seqs
