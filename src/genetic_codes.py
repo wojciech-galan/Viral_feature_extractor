@@ -1,3 +1,6 @@
+#! /usr/bin/python
+# -*- coding: utf-8 -*-
+
 """ This file is a part of an application named viral_seq_classifier
 	If you have any questions and/or comments, don't hesitate to
 	contact me by email wojciech.galan@gmail.com
