@@ -20,6 +20,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>"""
 
+
 import logging
 import argparse
 import socket
@@ -27,7 +28,7 @@ import socket
 from Bio import Entrez
 from findingRecords import *
 from SeqContainer import Container
-from commonFunctions import createDirIfNotExists
+from commonFunctions import createDirIfNotExists, dateTime
 
 log_filename= os.path.join(os.path.dirname(__file__), CONF['log_file'])
 createDirIfNotExists(os.path.dirname(os.path.abspath(log_filename)))
@@ -43,15 +44,16 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Short sample description')
 	parser.add_argument('--email', action="store")
 	parser.add_argument('--timeout', action="store", type=int, default=5)
-	parser.add_argument('--output', action="store", default=os.path.split(os.path.dirname(__file__))[0])
-	parser.add_argument('--container', action="store", default='container.dump')
+	parser.add_argument('--outdir', action="store", default=os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files')\
+                        , help='output directory')
+	parser.add_argument('--container', action="store", default='container_'+dateTime()+'.dump')
 	# "d" stands for "debug"
 	parser.add_argument('-d', action="store_true", default=False)
 	result = parser.parse_args()
 	#print result
 	Entrez.email=result.email
 	timeout = result.timeout
-	out_dir = os.path.expanduser(result.output)
+	out_dir = os.path.expanduser(result.outdir)
 	debug = result.d
 	container_path = os.path.join(out_dir, result.container)
 	#term = termCreation('complete', 'title', 'refseq', 'viruses')
@@ -80,6 +82,7 @@ if __name__ == "__main__":
 	else:
 		seq_representations = []
 	seq_representations.extend(findHost(term, ids, out_dir, debug, tax_directory=tax_dir))
+	createDirIfNotExists(out_dir)
 	Container(seq_representations).save(container_path)
 	# TODO niech loguje ID sekwencji, z którymi się coś nie udało
 	# TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów. - doing

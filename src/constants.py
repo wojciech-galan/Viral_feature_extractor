@@ -42,7 +42,7 @@ database_path=os.path.join(DIR_NAME, 'databases')
 
 strange_orgname='dziwna budowa orgname w tym pliku'
 
-acid_to_number = {'dna':1.0, 'rna':0.0}
+ACID_TO_NUMBER = {'dna':1.0, 'rna':0.0}
 strands_to_number = {'ss':1.0, 'ds':2.0, 'mixed':1.5}
 
 NA_IUPAC = {'A':('A',), 'C':('C',), 'G':('G',), 'T':('T',),

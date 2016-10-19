@@ -164,7 +164,6 @@ if __name__ == '__main__':
     parser.add_argument('--classifier', type=str, default='classifier_'+commonFunctions.dateTime()+'.dump',
                         help="Classifier file name")
     args = parser.parse_args()
-    print args
     if not (args.classifier_type.lower() == 'svm' or args.classifier_type.lower() == 'knn' or args.classifier_type.lower() == 'qda'):
         raise ValueError("Classifier should be SVM, kNN or QDA")
     out_dir = args.outdir
@@ -172,13 +171,18 @@ if __name__ == '__main__':
     scaller_path = os.path.join(out_dir, args.scaller)
     classifier_path = os.path.join(out_dir, args.classifier)
     container = pickle.load(open(os.path.expanduser(args.container)))
+    #todo za dużo tych setów, niech robi tylko jeden potrzebny, bo brakuje pamięci
+    import pdb
+    pdb.set_trace()
+    #todo widzę jakiś problem z określaniem lineage hosta - problem wewnątrz host_processing. sprawdzić!
     sets = commonFunctions.processSetsOfNotNoneAttrs(commonFunctions.setsOfNotNoneAttrs( container ) )
     sequences = sets[ attribs ]
-    attributes, classes, ids, features = commonFunctions.getAttributesClassesIdsFeatures( attribs, sequences, { 0:{ 'Eukaryota':1 }, 1:{ 'Bacteria':1, 'Archaea':1 } } )
+    attributes, classes, ids, features = getAttributesClassesIdsFeatures( attribs, sequences, { 0:{ 'Eukaryota':1 }, 1:{ 'Bacteria':1, 'Archaea':1 } } )
+    attributes, classes, ids = balancedSubsample( attributes, classes, ids )
     scaller = StandardScaler()
     attributes = scaller.fit_transform(attributes)
     joblib.dump(scaller, scaller_path)
-    classifier = classifier_dict[args.classifier]
-    classifier.fit(attributes)
+    classifier = classifier_dict[args.classifier_type.lower()]
+    classifier.fit(attributes, classes)
     joblib.dump(classifier, classifier_path)
     print 'Scaller and classifier saved in {}'.format(out_dir)

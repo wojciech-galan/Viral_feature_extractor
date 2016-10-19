@@ -202,8 +202,8 @@ class SeqRepresentation(BaseXML):
 			self.strand = strands_to_number[uniSeq.strand]
 		else:
 			self.strand = None
-		if uniSeq.molecule in acid_to_number:
-			self.molecule = acid_to_number[uniSeq.molecule]
+		if uniSeq.molecule in ACID_TO_NUMBER:
+			self.molecule = ACID_TO_NUMBER[uniSeq.molecule]
 		else:
 			self.molecule = None
 			logger.info("For gi=%s molecule=%s" %(uniSeq.gi, uniSeq.molecule))
