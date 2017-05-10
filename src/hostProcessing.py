@@ -28,6 +28,7 @@ import urllib2
 import re
 import time
 
+from StringIO import StringIO
 from Bio import Entrez
 import logging
 from lxml import etree
@@ -73,7 +74,9 @@ def getAllHosts(tax_dir):
                 handle.close()
             except UnboundLocalError:
                 pass
-    print len(id_list), retmax
+    ids_not_downloaded = [f for f in id_list if f not in set(os.listdir(tax_dir))]
+    # ściąganie dużych ilości danych
+
     ret_dict = {}
     while id_list:
         host_id = id_list[0]
@@ -84,6 +87,35 @@ def getAllHosts(tax_dir):
         print len(id_list), "ids left", res
         ret_dict[host_id] = res
     return ret_dict
+
+
+def fetch_ids(id_list, tax_dir, size=200):
+    for x in range(0, len(id_list), size):
+        ids = id_list[x:x+size]
+        done = False
+        while not done:
+            try:
+                handle = Entrez.efetch(db='taxonomy', id=','.join(ids))
+                header = ''.join([handle.readline(), handle.readline()])
+                content = handle.read()
+            except (socket.error, httplib.IncompleteRead, urllib2.URLError, socket.timeout), e:
+                logger.error(e)
+                continue
+            finally:
+                handle.close()
+            all_content = ''.join([header, content])
+            try:
+                xml = etree.parse(StringIO(all_content))
+                done = True
+            except Entrez.Parser.NotXMLError, e:
+                logger.error(e)
+            root = xml.getroot()
+            for child in root.getchildren():
+                root2 = etree.Element(root.tag)
+                root2.append(child)
+                taxid = child['TaxId']
+                childstr = header + etree.tostring(root2)
+                open(os.path.join(tax_dir, taxid), 'w').write(childstr)
 
 
 def putHostsInDb(hosts_dict, clear=False):
@@ -258,7 +290,7 @@ if __name__ == '__main__':
                         filemode='w')
     parser = argparse.ArgumentParser(description='Short sample description')
     parser.add_argument('--email', action="store")
-    parser.add_argument('--timeout', action="store", default=5, type=int)
+    parser.add_argument('--timeout', action="store", default=10, type=int)
     result = parser.parse_args()
     Entrez.email = result.email
     timeout = result.timeout
