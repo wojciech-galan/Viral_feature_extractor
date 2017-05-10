@@ -79,7 +79,7 @@ def getAllHosts(tax_dir):
 		id_list.remove(host_id)
 		if not res: # event already logged in function lineage
 			continue
-		print len(id_list), res
+		print len(id_list), "ids left", res
 		ret_dict[host_id] = res
 	return ret_dict
 
