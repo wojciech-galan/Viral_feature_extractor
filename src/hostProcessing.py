@@ -52,7 +52,7 @@ HOST_NAMES = tuple(getHostNames())
 ###########################################################			koniec!!!!		 	###########################################
 
 
-def getAllHosts():
+def getAllHosts(tax_dir):
 	'''Pobiera listę wszystkich gatunków z NCBI Taxonomy'''
 	done = False
 	while not done:
@@ -75,7 +75,7 @@ def getAllHosts():
 	ret_dict = {}
 	while id_list:
 		host_id = id_list[0]
-		res = lineage(host_id)
+		res = lineage(host_id, tax_dir)
 		id_list.remove(host_id)
 		if not res: # event already logged in function lineage
 			continue
@@ -255,10 +255,10 @@ if __name__ == '__main__':
 						filemode='w')
 	parser = argparse.ArgumentParser(description='Short sample description')
 	parser.add_argument('--email', action="store")
-	parser.add_argument('--timeout', action="store", type=int)
+	parser.add_argument('--timeout', action="store", default=5, type=int)
 	result = parser.parse_args()
 	Entrez.email=result.email
 	timeout = result.timeout
 	socket.setdefaulttimeout(timeout)
-	hosts = getAllHosts()
+	hosts = getAllHosts(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files',CONF['taxonomy_dir']))
 	putHostsInDb(hosts, True)
