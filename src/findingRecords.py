@@ -40,6 +40,7 @@ from constants import *
 
 logger = logging.getLogger(os.path.basename(__file__))
 
+
 def findRecords(term, database, debug=False, retmax=0):
     # if retmax==0 - dostajemy wszystkie rekordy
     # if debug:
@@ -49,11 +50,12 @@ def findRecords(term, database, debug=False, retmax=0):
         record = Entrez.read(handle)
         retmax = record['Count']
     handle = Entrez.esearch(db=database, term=term, retmax=retmax)
-    #print handle.geturl()
+    # print handle.geturl()
     id_list = Entrez.read(handle)['IdList']
     handle.close()
     print "Found %s ids" % len(id_list)
     return id_list
+
 
 def createEmptyFile(path):
     """
@@ -61,19 +63,22 @@ def createEmptyFile(path):
     :param path:
     :return: None
     """
-    #pdb.set_trace()
+    # pdb.set_trace()
     if not os.path.exists(path):
         directory = path.rsplit(os.sep, 1)[0]
         if not os.path.exists(directory):
             os.makedirs(directory)
         open(path, 'w').close()
 
+
 def createDirIfNotExists(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'],\
-             improper_host_path=CONF['improper_host_path'], processed_seq_directory=CONF['processed_seq_dir'], rettype='xml'):
+
+def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'], \
+             improper_host_path=CONF['improper_host_path'], processed_seq_directory=CONF['processed_seq_dir'],
+             rettype='xml'):
     '''Argumenty:
     - term - to co dostajemy po termCreation
     - ids - lista identyfikatorow sekwencji z bazy nuccore
@@ -82,21 +87,21 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
     - seq_directory - folder na pliki xml z sekwencjami
     - tex_directory - folder na pliki xml z bazy taxonomy'''
     seqs = []
-    #createEmptyFile(improper_host_path)
+    # createEmptyFile(improper_host_path)
     tax_directory = os.path.join(out_dir, tax_directory)
     seq_directory = os.path.join(out_dir, seq_directory)
     processed_seq_directory = os.path.join(out_dir, processed_seq_directory)
     createDirIfNotExists(tax_directory)
     createDirIfNotExists(seq_directory)
     createDirIfNotExists(processed_seq_directory)
-    #if not os.path.exists(seq_directory):
+    # if not os.path.exists(seq_directory):
     #    os.mkdir(containers_path)
     # try:
     #     os.mkdir( '../prints' )
     # except OSError:
     #     pass
     while id_list:
-        print '%s ids left'%len(id_list)
+        print '%s ids left' % len(id_list)
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
         processed_path = os.path.join(processed_seq_directory, id_)
@@ -118,9 +123,9 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
                 seq = pickle.load(open(processed_path))
             else:
                 with open(path) as handle:
-                    seq=LittleParser.fromHandle(handle, tax_directory, debug)
+                    seq = LittleParser.fromHandle(handle, tax_directory, debug)
                     pickle.dump(seq, open(processed_path, 'w'), pickle.HIGHEST_PROTOCOL)
-                    #open(processed_path, 'w').write(str(seq))
+                    # open(processed_path, 'w').write(str(seq))
             seqs.append(seq)
             id_list.remove(id_)
         except EOFError, e:
@@ -133,16 +138,16 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
             logger.error(e)
             print e
             time.sleep(1)
-        #except (Entrez.Parser.NotXMLError, httplib.IncompleteRead):
-        except ( etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError ), e:
-            #raise
-            print "Parsing error while parsing %s"%path
+        # except (Entrez.Parser.NotXMLError, httplib.IncompleteRead):
+        except (etree.XMLSyntaxError, socket.error, httplib.IncompleteRead, urllib2.URLError, NameError), e:
+            # raise
+            print "Parsing error while parsing %s" % path
             logger.error(e)
             try:
                 os.remove(path)
             except (IOError, OSError), er:
                 logger.info(er)
-            #dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
+            # dumping(seqs_with_host, seqs_without_host, id_list, host_fname, no_host_fname, ids_left_fname, temp_directory)
             time.sleep(1)
         except NameError, e:
             logger.debug(e)

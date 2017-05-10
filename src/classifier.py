@@ -42,12 +42,12 @@ def classify(seq, nuc_acid, scaller, classifier, probas=False):
     acid_code = constants.ACID_TO_NUMBER[nuc_acid]
     length = len(seq)
     nuc_frequencies = commonFunctions.nucFrequencies(seq, 2)
-    nuc_frequencies_ = {'nuc_frequencies__'+key : value for key, value in
-                       nuc_frequencies.iteritems()}
-    relative_nuc_frequencies_one_strand_ = {'relative_nuc_frequencies_one_strand__'+key : value for key, value in
-                                           commonFunctions.relativeNucFrequencies(nuc_frequencies, 1).iteritems()}
-    relative_trinuc_freqs_one_strand_ = {'relative_trinuc_freqs_one_strand__'+key : value for key, value in
-                                        commonFunctions.thirdOrderBias(seq, 1).iteritems()}
+    nuc_frequencies_ = {'nuc_frequencies__' + key: value for key, value in
+                        nuc_frequencies.iteritems()}
+    relative_nuc_frequencies_one_strand_ = {'relative_nuc_frequencies_one_strand__' + key: value for key, value in
+                                            commonFunctions.relativeNucFrequencies(nuc_frequencies, 1).iteritems()}
+    relative_trinuc_freqs_one_strand_ = {'relative_trinuc_freqs_one_strand__' + key: value for key, value in
+                                         commonFunctions.thirdOrderBias(seq, 1).iteritems()}
     freqs = nuc_frequencies_
     freqs.update(relative_nuc_frequencies_one_strand_)
     freqs.update(relative_trinuc_freqs_one_strand_)
@@ -60,7 +60,7 @@ def classify(seq, nuc_acid, scaller, classifier, probas=False):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='') #todo dodać opis
+    parser = argparse.ArgumentParser(description='')  # todo dodać opis
     parser.add_argument('sequence', type=str, help='sequence in plaintekst')
     parser.add_argument('nucleic_acid', type=str, help='nucleic acid: either DNA or RNA')
     parser.add_argument('classifier', type=str, help='classifier: SVM, kNN or QDA')
