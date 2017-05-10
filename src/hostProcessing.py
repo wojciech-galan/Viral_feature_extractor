@@ -75,8 +75,11 @@ def getAllHosts(tax_dir):
             except UnboundLocalError:
                 pass
     ids_not_downloaded = [f for f in id_list if f not in set(os.listdir(tax_dir))]
+    import pdb
+    pdb.set_trace()
     # ściąganie dużych ilości danych
-
+    print len(id_list), "taxids found", len(ids_not_downloaded), "to be downloaded"
+    fetch_ids(ids_not_downloaded, tax_dir)
     ret_dict = {}
     while id_list:
         host_id = id_list[0]
@@ -93,9 +96,12 @@ def fetch_ids(id_list, tax_dir, size=200):
     for x in range(0, len(id_list), size):
         ids = id_list[x:x+size]
         done = False
+        print x
         while not done:
+            print "w pętli"
             try:
                 handle = Entrez.efetch(db='taxonomy', id=','.join(ids))
+                print handle.geturl()
                 header = ''.join([handle.readline(), handle.readline()])
                 content = handle.read()
             except (socket.error, httplib.IncompleteRead, urllib2.URLError, socket.timeout), e:
@@ -293,6 +299,7 @@ if __name__ == '__main__':
     parser.add_argument('--timeout', action="store", default=10, type=int)
     result = parser.parse_args()
     Entrez.email = result.email
+
     timeout = result.timeout
     socket.setdefaulttimeout(timeout)
     hosts = getAllHosts(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files', CONF['taxonomy_dir']))
