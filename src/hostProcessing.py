@@ -74,11 +74,9 @@ def getAllHosts(tax_dir):
                 handle.close()
             except UnboundLocalError:
                 pass
-    ids_not_downloaded = [f for f in id_list if f not in set(os.listdir(tax_dir))]
-    import pdb
-    pdb.set_trace()
+    ids_not_downloaded = list(set(id_list) - set(os.listdir(tax_dir)))
     # ściąganie dużych ilości danych
-    print len(id_list), "taxids found", len(ids_not_downloaded), "to be downloaded"
+    print len(id_list), "taxids found,", len(ids_not_downloaded), "to be downloaded"
     fetch_ids(ids_not_downloaded, tax_dir)
     ret_dict = {}
     while id_list:
@@ -87,7 +85,7 @@ def getAllHosts(tax_dir):
         id_list.remove(host_id)
         if not res:  # event already logged in function lineage
             continue
-        print len(id_list), "ids left", res
+        print len(id_list), "ids left"
         ret_dict[host_id] = res
     return ret_dict
 
@@ -119,7 +117,7 @@ def fetch_ids(id_list, tax_dir, size=200):
             for child in root.getchildren():
                 root2 = etree.Element(root.tag)
                 root2.append(child)
-                taxid = child['TaxId']
+                taxid = child.find('TaxId').text
                 childstr = header + etree.tostring(root2)
                 open(os.path.join(tax_dir, taxid), 'w').write(childstr)
 
@@ -289,6 +287,12 @@ if __name__ == '__main__':
     import argparse
 
     log_filename = os.path.join(os.path.dirname(__file__), CONF['log_file'])
+    if not os.path.exists(os.path.dirname(log_filename)):
+        os.makedirs(os.path.dirname(log_filename))
+    tax_dir = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files', CONF['taxonomy_dir'])
+    if not os.path.exists(tax_dir):
+        os.makedirs(tax_dir)
+    open(log_filename, 'w').close()
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                         datefmt='%m-%d %H:%M',
@@ -302,5 +306,5 @@ if __name__ == '__main__':
 
     timeout = result.timeout
     socket.setdefaulttimeout(timeout)
-    hosts = getAllHosts(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files', CONF['taxonomy_dir']))
+    hosts = getAllHosts(tax_dir)
     putHostsInDb(hosts, True)

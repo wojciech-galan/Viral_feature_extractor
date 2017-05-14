@@ -31,7 +31,7 @@ from constants import *
 
 from commonFunctions import createDirIfNotExists
 
-DB_FILE_NAMES = [str(i) for i in range(1, 10)]
+DB_FILE_NAMES = [str(i) for i in range(10)]
 
 
 def sql_trace(stmt, bindings):
@@ -56,7 +56,7 @@ class VirtualConnection(object):
             fname = os.path.join(directory, s)
             if not os.path.exists(fname):
                 open(fname, 'w').close()
-            self.connections.append(apsw.Connection(fname))
+            self.connections.append(apsw.Connection(fname, statementcachesize=50000))
 
     def __iter__(self):
         return iter(self.connections)
@@ -72,6 +72,9 @@ class VirtualCursor(object):
     def __init__(self, virtual_connection):
         super(VirtualCursor, self).__init__()
         self.cursors = [conn.cursor() for conn in virtual_connection]
+        for cur in self.cursors:
+            cur.execute("PRAGMA synchronous = OFF")
+            cur.execute("PRAGMA journal_mode = MEMORY")
 
     def setexectrace(self, sql_trace):
         for cur in self.cursors:
@@ -95,13 +98,15 @@ class VirtualCursor(object):
 
     def executemany(self, statements, sequenceofbindings, primary_key='tax_id'):
         """For operations, that should modify database and be performed only on some of the databases"""
+        l = [[] for x in range(len(self.cursors))]
         for binding in sequenceofbindings:
-            cur = self.cursors[int(binding[primary_key][0]) - 1]
-            cur.execute(statements, binding)
+            l[int(binding[primary_key][-1])].append(binding)
+        for i in range(len(self.cursors)):
+            self.cursors[i].executemany(statements, tuple(l[i]))
 
     def executeone(self, statement, sequenceofbindings, primary_key='tax_id'):
         """For operations, that should modify database and be performed only on one of the databases"""
-        cur = self.cursors[int(sequenceofbindings[0][primary_key][0]) - 1]
+        cur = self.cursors[int(sequenceofbindings[0][primary_key][-1])]
         cur.execute(statement)
 
 
