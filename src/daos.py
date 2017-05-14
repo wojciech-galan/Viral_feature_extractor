@@ -58,6 +58,10 @@ class VirtualConnection(object):
                 open(fname, 'w').close()
             self.connections.append(apsw.Connection(fname, statementcachesize=50000))
 
+    def __del__(self):
+        for c in self.connections:
+            c.close()
+
     def __iter__(self):
         return iter(self.connections)
 
