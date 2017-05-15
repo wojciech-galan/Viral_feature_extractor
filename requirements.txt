@@ -1,2 +1,4 @@
-sklearn>=0.18
 apsw>=3.7.6.3
+biopython>=1.69
+numpy>=1.12
+lxml>=3.3
