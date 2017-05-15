@@ -1,4 +1,4 @@
 apsw>=3.7.6.3
-biopython>=1.69
+biopython>=1.68
 numpy>=1.12
 lxml>=3.3
