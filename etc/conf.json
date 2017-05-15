@@ -1,8 +1,0 @@
-{
-  "eutils_term":"Viruses[Organism] AND srcdb_refseq[PROP] NOT wgs[prop] NOT cellular organisms[ORGN] NOT AC_000001:AAC_999999[pacc]",
-  "seq_dir":"sequences",
-  "processed_seq_dir":"processed_seqences",
-  "taxonomy_dir":"taxonomy",
-  "improper_host_path":"../error_dir/hosts",
-  "log_file":"../logs/logs"
-}
