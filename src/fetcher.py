@@ -41,7 +41,7 @@ logging.basicConfig(level=logging.DEBUG,
 if __name__ == "__main__":
     logger = logging.getLogger(os.path.basename(__file__))
     parser = argparse.ArgumentParser(description='Short sample description')
-    parser.add_argument('--email', action="store")
+    parser.add_argument('--email', action="store", required=True)
     parser.add_argument('--timeout', action="store", type=int, default=5)
     parser.add_argument('--outdir', action="store",
                         default=os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files') \
