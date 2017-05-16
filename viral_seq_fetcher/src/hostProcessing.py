@@ -221,7 +221,7 @@ def findHostLineage(host_name, tax_dir, debug=True):
             # pdb.set_trace()
             return findHostLineage(host_name.split(';')[0].strip(), tax_dir=tax_dir, debug=debug)
         else:
-            logger.error("EROR while processing host_name %s" % host_name)
+            logger.error("ERROR while processing host_name %s" % host_name)
     elif len(host_name.split()) > 1 and (host_name.endswith(' sp.') or host_name.endswith(' L.')):
         # pdb.set_trace()
         return findHostLineage(host_name[:-3].strip(), tax_dir=tax_dir, debug=debug)
