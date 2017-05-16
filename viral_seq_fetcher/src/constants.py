@@ -27,7 +27,7 @@ searchURL = 'http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
 fetchURL = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
 DIR_NAME = os.path.split(os.path.dirname(__file__))[0]
-CONF_PATH = os.path.join(DIR_NAME, 'etc', 'conf.json')
+CONF_PATH = os.path.join(DIR_NAME, 'conf.json')
 CONF = json.load(open(CONF_PATH))
 
 parser_classes_dir = os.path.join(os.path.dirname(__file__), 'parser_classes')

@@ -95,9 +95,7 @@ def main_for_host_processing(args=sys.argv[1:]):
     parser.add_argument('--email', action="store")
     parser.add_argument('--timeout', action="store", default=10, type=int)
     parser.add_argument('--taxdir', action="store",
-                        # default=os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files') \
-                        default = 'files'
-                        , help='directory for taxonomy files')
+                        default = os.path.jo('files', CONF['taxonomy_dir']), help='directory for taxonomy files')
     result = parser.parse_args(args)
     tax_dir = result.taxdir
     if not os.path.exists(tax_dir):
