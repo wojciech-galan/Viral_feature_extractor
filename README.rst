@@ -52,7 +52,7 @@ results as well as temporary files will be available in directory "files". You c
 
     fetch_viral_sequences --email your@email --outdir directory_name
 
-By default, results are stored in a file, whose name begins from 'container'. Again, tou can change the default behaviour
+By default, results are stored in a file, whose name begins from 'container'. Again, you can change the default behaviour
 using --container option. If you experience network issues, you may increase the connection timeout (5 seconds) with
 --timeout option
 
