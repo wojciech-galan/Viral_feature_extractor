@@ -159,6 +159,7 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
                 handle.close()
             except UnboundLocalError:
                 pass
+        logger.info('Id %s processed' %id_)
 
 
     # container = Container( seqs )
