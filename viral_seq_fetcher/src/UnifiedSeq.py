@@ -63,8 +63,8 @@ class UnifiedSeq(BaseXML):
                 pdb.set_trace()
             if obj.completeness:
                 pdb.set_trace()
-            if not obj.virus_name and not 'environmental samples' in obj.lineage:  # może być <lineage>Viruses; ssDNA viruses; Circoviridae; environmental samples</lineage>
-                pdb.set_trace()
+            # if not obj.virus_name and not 'environmental samples' in obj.lineage:  # może być <lineage>Viruses; ssDNA viruses; Circoviridae; environmental samples</lineage>
+            #     pdb.set_trace()
             self.virus_name = obj.virus_name
             if obj.missing_cd_regions:  # w przypadku konfliktu w CdRegion (istnieje CdRegion.conflict)
                 pass
