@@ -4,5 +4,5 @@
   "processed_seq_dir":"processed_seqences",
   "taxonomy_dir":"taxonomy",
   "improper_host_path":"../error_dir/hosts",
-  "log_file":"../logs/logs"
+  "log_file":"log"
 }

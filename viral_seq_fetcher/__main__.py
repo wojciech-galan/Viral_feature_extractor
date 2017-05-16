@@ -30,7 +30,7 @@ from src.findingRecords import *
 from src.SeqContainer import Container
 from src.commonFunctions import createDirIfNotExists, dateTime
 
-log_filename = os.path.join(os.path.dirname(__file__), CONF['log_file']) #TODO do zmiany, ma ścieżki unix'owe
+log_filename = CONF['log_file']
 createDirIfNotExists(os.path.dirname(os.path.abspath(log_filename)))
 
 logging.basicConfig(level=logging.DEBUG,
@@ -46,9 +46,7 @@ def main(args=sys.argv[1:]):
     parser.add_argument('--email', action="store", required=True)
     parser.add_argument('--timeout', action="store", type=int, default=5)
     parser.add_argument('--outdir', action="store",
-                        # default=os.path.join(os.path.split(os.path.dirname(__file__))[0], 'files') \
-                        default = 'files'
-                        , help='output directory')
+                        default = 'files', help='output directory')
     parser.add_argument('--container', action="store", default='container_' + dateTime() + '.dump')
     # "d" stands for "debug"
     parser.add_argument('-d', action="store_true", default=False)
@@ -113,12 +111,13 @@ def main_for_host_processing(args=sys.argv[1:]):
 
 
 if __name__ == "__main__":
-    print sys.argv
-    if sys.argv[0] == "blah":
-        pass
-    elif sys.argv[0] == "blah2":
-        pass
-    main()
+    # print sys.argv
+    # if sys.argv[0] == "blah":
+    #     pass
+    # elif sys.argv[0] == "blah2":
+    #     pass
+    # main()
+    pass
     # TODO niech loguje ID sekwencji, z którymi się coś nie udało
     # TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów. - doing
     # TODO - sprawdzić, czy potem w miarę szybko jest dostęp do tych danych
