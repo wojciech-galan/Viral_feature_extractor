@@ -1,0 +1,4 @@
+include LICENSE.md
+include *.rst
+include viral_seq_fetcher/conf.json
+recursive-include viral_seq_fetcher/databases *
