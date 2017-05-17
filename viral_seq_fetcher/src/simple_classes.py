@@ -4,7 +4,7 @@
 __author__ = "wojtek"
 __date__ = "$2012-09-04 09:26:58$"
 
-""" This file is a part of an application named viral_seq_classifier
+""" This file is a part of an application named viral_seq_fetcher
 	If you have any questions and/or comments, don't hesitate to
 	contact me by email wojciech.galan@gmail.com
 
