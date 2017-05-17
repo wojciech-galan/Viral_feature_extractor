@@ -46,15 +46,15 @@ Usage
 
 In the simpliest case:
 
-    fetch_viral_sequences --email your@email
+    fetch_viral_sequences --email your@email --verbose
 
 results as well as temporary files will be available in directory "files". You can change the default behaviour:
 
-    fetch_viral_sequences --email your@email --outdir directory_name
+    fetch_viral_sequences --email your@email --outdir directory_name --verbose
 
 By default, results are stored in a file, whose name begins from 'container'. Again, you can change the default behaviour
 using --container option. If you experience network issues, you may increase the default connection timeout (5 seconds)
-with --timeout option
+with --timeout option.
 
 
 What to do with the container?
