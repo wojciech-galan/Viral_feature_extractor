@@ -60,16 +60,13 @@ with --timeout option
 What to do with the container?
 ~~~~~~~~~~~~
 
-.. code:: python
-
-  def my_function():
-      "just a test"
-      print 8/2
+The container can be easily read. Depending on the content of the source NCBI Nucleotide files, elements of the container
+(which are viral sequence representations) could contain bunch of different sequence features:
 
 .. code:: python
 
 	from viral_seq_fetcher.src import SeqContainer
-	container = SeqContainer.Container.fromFile('files/container_Tue_May_16_14:34:43_2017.dump')
+	container = SeqContainer.Container.fromFile('files/container_Tue_May_16_14:34:43_2017.dump') # replace with your container file path
 	print len(container), "reference genomic viral sequences"
 	with_host = container.getVirusesWithHost()
 	print len(with_host), "of the sequences sequences"
