@@ -76,7 +76,7 @@ def createDirIfNotExists(path):
         os.makedirs(path)
 
 
-def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'], \
+def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'], \
              improper_host_path=CONF['improper_host_path'], processed_seq_directory=CONF['processed_seq_dir'],
              rettype='xml'):
     '''Argumenty:
@@ -101,7 +101,8 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
     # except OSError:
     #     pass
     while id_list:
-        print '%s ids left' % len(id_list)
+        if verbose:
+            print '%s ids left' % len(id_list)
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
         processed_path = os.path.join(processed_seq_directory, id_)
@@ -109,7 +110,8 @@ def findHost(term, id_list, out_dir, debug, seq_directory=CONF['seq_dir'], tax_d
         while not os.path.exists(path):
             try:
                 handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="xml")
-                print handle.geturl()
+                if verbose:
+                    print handle.geturl()
                 with open(path, 'w') as file_handle:
                     file_handle.write(handle.read())
             except (urllib2.URLError, socket.timeout, socket.error), e:

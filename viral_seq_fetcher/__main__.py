@@ -48,6 +48,7 @@ def main(args=sys.argv[1:]):
     parser.add_argument('--outdir', action="store",
                         default = 'files', help='output directory')
     parser.add_argument('--container', action="store", default='container_' + dateTime() + '.dump')
+    parser.add_argument('-v', '--verbose', action="store_true", default=False)
     # "d" stands for "debug"
     parser.add_argument('-d', action="store_true", default=False)
     result = parser.parse_args(args)
@@ -84,9 +85,10 @@ def main(args=sys.argv[1:]):
         seq_representations = container.seqs
     else:
         seq_representations = []
-    seq_representations.extend(findHost(term, ids, out_dir, debug, tax_directory=CONF['taxonomy_dir']))
+    seq_representations.extend(findHost(term, ids, out_dir, debug, result.verbose, tax_directory=CONF['taxonomy_dir']))
     createDirIfNotExists(out_dir)
     Container(seq_representations).save(container_path)
+    print "output saved in %s" %container_path
 
 
 def main_for_host_processing(args=sys.argv[1:]):
