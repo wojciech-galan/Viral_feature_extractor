@@ -61,7 +61,15 @@ What to do with the container?
 ~~~~~~~~~~~~
 
 .. code:: python
-
+	from viral_seq_fetcher.src import SeqContainer
+	container = SeqContainer.Container.fromFile('files/container_Tue_May_16_14:34:43_2017.dump')
+	print len(container), "reference genomic viral sequences"
+	with_host = container.getVirusesWithHost()
+	print len(with_host), "of the sequences sequences"
+	print '---------------------------------------------------'
+	print dir(with_host[0])
+	print with_host[0].nuc_frequencies
+	print with_host[0].host_lineage
 
 Citation
 --------
