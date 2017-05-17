@@ -61,6 +61,13 @@ What to do with the container?
 ~~~~~~~~~~~~
 
 .. code:: python
+
+  def my_function():
+      "just a test"
+      print 8/2
+
+.. code:: python
+
 	from viral_seq_fetcher.src import SeqContainer
 	container = SeqContainer.Container.fromFile('files/container_Tue_May_16_14:34:43_2017.dump')
 	print len(container), "reference genomic viral sequences"
