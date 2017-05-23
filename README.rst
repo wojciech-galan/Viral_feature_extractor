@@ -72,8 +72,10 @@ The container can be easily read. Depending on the content of the source NCBI Nu
 	print len(with_host), "of the sequences sequences"
 	print '---------------------------------------------------'
 	print dir(with_host[0])
-	print with_host[0].nuc_frequencies
+	print with_host[0].nuc_frequencies # mono- and dinucleotide frequencies
 	print with_host[0].host_lineage
+	print with_host[0].relative_nuc_frequencies # 'second order bias'
+	print with_host[0].relative_trinuc_freqs # 'third order bias'
 
 Citation
 --------
