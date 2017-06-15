@@ -29,7 +29,7 @@ the easiest way to install viruses_classifier is using ``pip`` ::
 
     pip install -U git+https://github.com/wojciech-galan/Viral_feature_extractor.git --user
 
-It is recommended not to install this package system-wide
+and assure that the directory you have installed the program to (for Ubuntu its /home/username/.local/bin/) is in your system PATH. It is recommended not to install this package system-wide.
 
 
 Source code
