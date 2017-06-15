@@ -27,7 +27,7 @@ User installation
 If you already have a working installation of the dependencies,
 the easiest way to install viruses_classifier is using ``pip`` ::
 
-    pip install -U git+https://github.com/wojciech-galan/Host-taxon-predictor.git --user
+    pip install -U git+https://github.com/wojciech-galan/Viral_feature_extractor.git --user
 
 It is recommended not to install this package system-wide
 
@@ -37,7 +37,7 @@ Source code
 
 You can check the latest sources with the command::
 
-    git clone https://github.com/wojciech-galan/Host-taxon-predictor
+    git clone https://github.com/wojciech-galan/Viral_feature_extractor
 
 
 
