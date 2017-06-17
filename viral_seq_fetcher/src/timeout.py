@@ -11,12 +11,16 @@ import errno
 import os
 import signal
 
+try:
+    err_num = errno.ETIME
+except: #works under windows
+    err_num = 1460 
 
 class TimeoutError(Exception):
     pass
 
 
-def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
+def timeout(seconds=10, error_message=os.strerror(err_num)):
     def decorator(func):
         def _handle_timeout(signum, frame):
             raise TimeoutError(error_message)
