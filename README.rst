@@ -19,6 +19,8 @@ viral_seq_fetcher requires:
 - apsw >= 3.7.6.3
 - Biopython >= 1.68
 - lxml >= 3.3
+- git (required for installation with pip)
+- (for Windows users only) Visual C++ Compiler for Python 2.7 
 
 
 User installation
@@ -30,6 +32,10 @@ the easiest way to install viruses_classifier is using ``pip`` ::
     pip install -U git+https://github.com/wojciech-galan/Viral_feature_extractor.git --user
 
 and assure that the directory you have installed the program to (for Ubuntu its /home/username/.local/bin/) is in your system PATH. It is recommended not to install this package system-wide.
+
+Windows installation issues
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pip fails when installing apsw (at leas on Win7), so you have to install it manually.
 
 
 Source code
