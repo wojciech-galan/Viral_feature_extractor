@@ -101,7 +101,7 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
     # except OSError:
     #     pass
     while id_list:
-        if verbose:
+        if verbose or not (len(id_list) % 20):
             print '%s ids left' % len(id_list)
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
@@ -125,7 +125,7 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
                 seq = pickle.load(open(processed_path))
             else:
                 with open(path) as handle:
-                    seq = LittleParser.fromHandle(handle, tax_directory, debug)
+                    seq = LittleParser.fromHandle(handle, tax_directory, debug, verbose)
                     pickle.dump(seq, open(processed_path, 'w'), pickle.HIGHEST_PROTOCOL)
                     # open(processed_path, 'w').write(str(seq))
             seqs.append(seq)

@@ -54,7 +54,7 @@ class LittleParser(object):
         return cls(**object_dict)
 
     @classmethod
-    def fromHandle(cls, handle, taxonomy_dir, debug):
+    def fromHandle(cls, handle, taxonomy_dir, debug, verbose):
         '''handle - uchwyt do pliku lub zasobu w sieci'''
         object_dict = {}
         try:
@@ -76,7 +76,7 @@ class LittleParser(object):
         object_dict['_za_ktorym_razem'] = 0
         object_dict['_host'] = []
         # file is empty - throws XMLSyntaxError
-        seq = _parse(handle, taxonomy_dir, debug)
+        seq = _parse(handle, taxonomy_dir, debug, verbose)
         return seq
 
     @constantIfProper
@@ -95,9 +95,10 @@ class LittleParser(object):
         pass
 
 
-def _parse(handle, taxonomy_dir, debug):
+def _parse(handle, taxonomy_dir, debug, verbose):
     object_dict = {}
-    print handle.name
+    if verbose:
+        print handle.name
     gi = os.path.basename(handle.name)
     int(gi)  # upewniam się, że to zawsze będzie numer
     root = processFile(handle)
@@ -121,6 +122,6 @@ def _parse(handle, taxonomy_dir, debug):
         uniSeq = UnifiedSeq(seq_entry_set)
     else:
         pdb.set_trace()
-    ssseq = SeqRepresentation(uniSeq, taxonomy_dir, debug)
+    ssseq = SeqRepresentation(uniSeq, taxonomy_dir, debug, verbose)
 
     return ssseq

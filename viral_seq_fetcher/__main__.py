@@ -97,7 +97,7 @@ def main_for_host_processing(args=sys.argv[1:]):
     parser.add_argument('--email', action="store")
     parser.add_argument('--timeout', action="store", default=10, type=int)
     parser.add_argument('--taxdir', action="store",
-                        default = os.path.jo('files', CONF['taxonomy_dir']), help='directory for taxonomy files')
+                        default = os.path.join('files', CONF['taxonomy_dir']), help='directory for taxonomy files')
     result = parser.parse_args(args)
     tax_dir = result.taxdir
     if not os.path.exists(tax_dir):
@@ -117,12 +117,10 @@ if __name__ == "__main__":
     # elif sys.argv[0] == "blah2":
     #     pass
     # main()
-    pass
+    main()
     # TODO niech loguje ID sekwencji, z którymi się coś nie udało
     # TODO niech (może przy pierwszym wywołaniu programu, na poczśtku) uzupełnia bazę hostów. - doing
     # TODO - sprawdzić, czy potem w miarę szybko jest dostęp do tych danych
     # TODO porównać profilerem, jak to wygląda czasowo dla jednego profilu robionego wcześniej, a drugiego w locie
-    # TODO czy działa pod windą?
     # TODO zastanowić się dobrze nad debugiem - kiedy to jest potrzebne
-    # może debug konkretnie dla takich plików, gdzie mogło coś nie pójść?
     # TODO ustalić odpowiedzialność leveli - i skorzystać z flagi DEBUG
