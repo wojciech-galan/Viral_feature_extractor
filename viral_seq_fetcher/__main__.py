@@ -55,7 +55,7 @@ def main(args=sys.argv[1:]):
     # print result
     Entrez.email = result.email
     timeout = result.timeout
-    out_dir = os.path.expanduser(result.outdir)
+    out_dir = os.path.expanduser(result.outdir.lstrip(os.path.sep))
     debug = result.d
     container_path = os.path.join(out_dir, result.container)
     # term = termCreation('complete', 'title', 'refseq', 'viruses')
