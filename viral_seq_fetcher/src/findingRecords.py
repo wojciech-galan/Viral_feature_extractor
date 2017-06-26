@@ -95,11 +95,11 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
     createDirIfNotExists(seq_directory)
     createDirIfNotExists(processed_seq_directory)
 
-    already_print = False
     while id_list:
-        if verbose or (not (len(id_list) % 20) and not already_print):
+        if verbose or not (len(id_list) % 20):
+            import pdb
+            pdb.set_trace()
             print '%s ids left' % len(id_list)
-            already_print = True
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
         processed_path = os.path.join(processed_seq_directory, id_)
@@ -159,5 +159,4 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
             except UnboundLocalError:
                 pass
         logger.info('Id %s processed' %id_)
-        already_print = False
     return seqs
