@@ -89,7 +89,6 @@ ENV/
 
 # Excluded by me
 .idea
-error_dir/
-logs/
-sequences/
-taxonomy/
+log
+files/sequences/
+files/processed_sequences/
