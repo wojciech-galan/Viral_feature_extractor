@@ -34,6 +34,7 @@ import cPickle as pickle
 from lxml import etree
 from Bio import Entrez
 
+from UnifiedSeq import UnifiedSeq
 from LittleParser import LittleParser
 from simple_classes import UnexpectedValueException
 from constants import *
@@ -117,12 +118,11 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
         try:
             # seq - obiekt typu SequenceRepresentation
             if os.path.exists(processed_path):
-                seq = pickle.load(open(processed_path))
+                seq = pickle.load(open(processed_path, 'rb'))
             else:
                 with open(path) as handle:
                     seq = LittleParser.fromHandle(handle, tax_directory, debug, verbose)
-                    pickle.dump(seq, open(processed_path, 'w'), pickle.HIGHEST_PROTOCOL)
-                    # open(processed_path, 'w').write(str(seq))
+                    pickle.dump(seq, open(processed_path, 'wb'), pickle.HIGHEST_PROTOCOL)
             seqs.append(seq)
             id_list.remove(id_)
         except EOFError, e:
