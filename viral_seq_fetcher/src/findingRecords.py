@@ -97,8 +97,6 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
 
     while id_list:
         if verbose or not (len(id_list) % 20):
-            import pdb
-            pdb.set_trace()
             print '%s ids left' % len(id_list)
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
