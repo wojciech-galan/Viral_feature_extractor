@@ -107,8 +107,11 @@ class Container(object):
     # 		pickle.dump( self, f, pickle.HIGHEST_PROTOCOL )
 
     def save(self, path):
+        if os.name == 'nt':
+            path = path.replace(':', '_')
         with open(path, 'wb') as f:
             pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
+        return path
 
     def getDsRNAViruses(self):
         return Container([x for x in self.seqs if x.lineage[1] == 'dsRNA viruses'], self.created)

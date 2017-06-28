@@ -87,7 +87,7 @@ def main(args=sys.argv[1:]):
         seq_representations = []
     seq_representations.extend(findHost(term, ids, out_dir, debug, result.verbose, tax_directory=CONF['taxonomy_dir']))
     createDirIfNotExists(out_dir)
-    Container(seq_representations).save(container_path)
+    container_path = Container(seq_representations).save(container_path)
     print "output saved in %s" %container_path
 
 
