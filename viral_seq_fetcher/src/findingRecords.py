@@ -151,6 +151,16 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
             # RuntimeException thrown by BioPython - it's BioPython's bug
             # should be RuntimeError
             time.sleep(1)
+        except Exception, e:
+            logger.debug(e)
+            try:
+                os.remove(path)
+            except BaseException, be:
+                logger.debug(be)
+            try:
+                os.remove(processed_path)
+            except BaseException, be:
+                logger.debug(be)
         finally:
             try:
                 handle.close()

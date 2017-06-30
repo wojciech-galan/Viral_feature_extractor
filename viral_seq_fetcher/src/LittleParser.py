@@ -37,6 +37,10 @@ from UnifiedSeq import UnifiedSeq, SeqRepresentation, NoSequenceException
 logger = logging.getLogger(os.path.basename(__file__))
 
 
+class LittleParserException(Exception):
+    pass
+
+
 class LittleParser(object):
     '''Klasa ma znalezc gospodarza i organizm (w postaci Viruses; ssRNA positive-strand viruses, no DNA stage; Picornavirales; Picornaviridae; Enterovirus
     dla odpowiedniego pliku xml, oraz id, nazwe i sekwencje'''
@@ -104,9 +108,9 @@ def _parse(handle, taxonomy_dir, debug, verbose):
     root = processFile(handle)
 
     if root.bioseq_set_seq_set__.__dict__.keys() != ['to_evaluate', 'seq_entry_', 'name']:
-        pdb.set_trace()
+        raise LittleParserException("root.bioseq_set_seq_set__.__dict__.keys() != ['to_evaluate', 'seq_entry_', 'name']")
     if len(root.bioseq_set_seq_set__.seq_entry_) != 1:
-        pdb.set_trace()
+        raise LittleParserException("len(root.bioseq_set_seq_set__.seq_entry_) != 1")
 
     seq_entry_ = root.bioseq_set_seq_set__.seq_entry_[0]
 
@@ -121,7 +125,7 @@ def _parse(handle, taxonomy_dir, debug, verbose):
         seq_entry_set = SeqEntrySet(seq_entry_.seq_entry_set_, gi)
         uniSeq = UnifiedSeq(seq_entry_set)
     else:
-        pdb.set_trace()
+        raise LittleParserException("No seq_entry_seq_ nor seq_entry_set_ in seq_entry_")
     ssseq = SeqRepresentation(uniSeq, taxonomy_dir, debug, verbose)
 
     return ssseq
