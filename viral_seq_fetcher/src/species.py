@@ -20,7 +20,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>"""
 
-species_dict = {
+species_dict_ = {
     'mulberry': 'Morus nigra',
     'cucumber': 'Cucumis sativus',
     'Yacon': 'Smallanthus sonchifolius',
@@ -69,5 +69,36 @@ species_dict = {
     'asymptomatic piglets': 'Sus scrofa',
     'sentinel monkey': 'Simiiformes',
     'Culicoides': 'Ceratopogoninae',
+    'Aedes camptorhynchus': 'Ochlerotatus camptorhynchus',
+    'Cebus apella': 'Sapajus apella',
+    'Tadarida plicata': 'Chaerephon plicatus',
+    'Canis familiaris': 'Canis lupus familiaris',
+    'Camponotus yamaokai': 'Camponotus',
+    'Chilli pepper': 'Capsicum annuum',
+    'Carios pusillus': 'Carios',
+    'Channeled applesnail':'Pomacea canaliculata',
+    'Charybdis crab': 'Charybdis',
+    'Conehead cricket': 'Neoconocephalus',
+    'Coquillettidia albicosta' : 'Coquillettidia',
+    'Corynorhinus rafinesquii': 'Plecotus rafinesquii',
+    'Culex simpliciforceps': 'Culex',
+    'Culex vishunui': 'Culex vishnui',
+    'Culicoides insignis': 'Culicoides',
+    'Erysiphe cichoracearum': 'Golovinomyces cichoracearum',
+    'Euonymus bungeanus': 'Euonymus maackii',
+    'Eustoma grandiflorum': 'Eustoma exaltatum subsp. russellianum',
+    'Fiddler crab': 'Uca',
+    'Hortobagy goose': 'Anserini',
+    'Hoya wayetii': 'Hoya',
+    'Lycopersicon esculentum': 'Solanum lycopersicum', # take a look at it in taxonomy database!!
+    'Mantis shrimp': 'Hoplocarida',
+    'Murex snails': 'Murex',
+    'Oncopera intricoides': 'Oncopera',
+    'Paphia shell': 'Paphia',
+    'Penaeid shrimp': 'Penaeidae',
+    'Pityohyphantes rubrofasciatus': 'Pityohyphantes',
+    'Romanomermis nematode': 'Romanomermis'
 }
-species_dict = {k.lower(): v for k, v in species_dict.iteritems()}
+species_dict = {k.lower(): v for k, v in species_dict_.iteritems()}
+#'Petunia hybrida' doesn't work for some reason. Check it!
+# neither does 'Phomopsis longicolla'
