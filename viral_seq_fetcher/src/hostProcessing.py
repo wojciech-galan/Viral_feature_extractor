@@ -201,7 +201,7 @@ def findHostLineage(host_name, tax_dir, debug=True, verbose=True):
     logger.info('Processing host name: %s'%host_name)
     if host_name.lower() in species_dict:
         host_name = species_dict[host_name.lower()]
-        logger.info('%s found in species dictionary' %species_dict[host_name.lower()])
+        logger.info('%s found in species dictionary' %host_name)
     # potem sprawdzamy, czy nazwa jest w bazie
     host_already_in_db = hostAlreadyInDb(host_name)
     if host_already_in_db:
