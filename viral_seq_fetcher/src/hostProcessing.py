@@ -198,11 +198,14 @@ def findHostInNCBITaxonomy(host_name, tax_dir, debug=True, verbose=True):
 def findHostLineage(host_name, tax_dir, debug=True, verbose=True):
     '''szuka danych organizmu ( lineage ) na podstawie nazwy podanej przez użytkownika'''
     # najpierw sprawdzamy, czy nazwa podana przez usera jest w słowniku
+    logger.info('Processing host name: %s'%host_name)
     if host_name.lower() in species_dict:
         host_name = species_dict[host_name.lower()]
+        logger.info('%s found in species dictionary' %species_dict[host_name.lower()])
     # potem sprawdzamy, czy nazwa jest w bazie
     host_already_in_db = hostAlreadyInDb(host_name)
     if host_already_in_db:
+        logger.info('Host found in database')
         return host_already_in_db[0].lineage
     elif re.search('\(.+\)', host_name):
         found = re.search('\(.+\)', host_name)
@@ -210,27 +213,32 @@ def findHostLineage(host_name, tax_dir, debug=True, verbose=True):
         name = name.strip()
         host_already_in_db = hostAlreadyInDb(name)
         if host_already_in_db:
+            logger.info('Original host name was not found in database, but similar name: %s was found' % name)
             return hostAlreadyInDb(name)[0].lineage
         else:
+            logger.info('Neither original host name nor similar name: %s was found in database' % name)
             return findHostLineage(name, tax_dir=tax_dir, debug=debug, verbose=verbose)
     # teraz sprawdzamy, czy nazwa usera nie zaczyna się przypadkiem którąś z nazw z bazy
     elif len(host_name.split()) > 1 and not (host_name.endswith(' sp.') or host_name.endswith(' L.')):
         for name in HOST_NAMES:
             if host_name.startswith(name) and len(name) > 2:
+                logger.info('Host name beggining from the same words (%s) was found in database' %name)
                 return hostAlreadyInDb(name)[0].lineage
         if ';' in host_name:
             # pdb.set_trace()
+            logger.info('";" character encountered in host name')
             return findHostLineage(host_name.split(';')[0].strip(), tax_dir=tax_dir, debug=debug, verbose=verbose)
         else:
             logger.error("ERROR while processing host_name %s" % host_name)
     elif len(host_name.split()) > 1 and (host_name.endswith(' sp.') or host_name.endswith(' L.')):
         # pdb.set_trace()
+        logger.info('"sp." or "L." encountered in host name')
         return findHostLineage(host_name[:-3].strip(), tax_dir=tax_dir, debug=debug, verbose=verbose)
     else:
         # szukamy hosta w NCBI Taxonomy
         # pdb.set_trace()
+        logger.info("Looking for host name in NCBITaxonomy")
         return findHostInNCBITaxonomy(host_name, tax_dir, debug=debug, verbose=verbose)
-        # TODO logowanie, gdy tu coś pójdzie nie tak
 
 
 def lineage(host_id, tax_directory):
