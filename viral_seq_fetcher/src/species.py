@@ -97,7 +97,28 @@ species_dict_ = {
     'Paphia shell': 'Paphia',
     'Penaeid shrimp': 'Penaeidae',
     'Pityohyphantes rubrofasciatus': 'Pityohyphantes',
-    'Romanomermis nematode': 'Romanomermis'
+    'Romanomermis nematode': 'Romanomermis',
+    'Abelmoscus esculentus': 'Abelmoschus esculentus', # apparently typo
+    'Abelmoshus esculentus': 'Abelmoschus esculentus', # apparently typo
+    'Acidianus uzoniensis': 'Acidianus',
+    'Aedes campestris': 'Ochlerotatus campestris',
+    'Aedes harrisoni': 'Aedes',
+    'African green monkey': 'Chlorocebus',
+    'Albelmoschus esculentus': 'Abelmoschus esculentus', # apparently typo
+    'Aporocactus flagelliformis': 'Disocactus flagelliformis',
+    'Propionibacterium acnes': 'Cutibacterium acnes ',
+    'razor shell': 'Ensis ',
+    'freshwater arthropod': 'Arthropoda',
+    'peanut worms': 'Sipuncula',
+    'freshwater shellfish': 'Bivalvia',
+    'freshwater atyid shrimp': 'Atyidae',
+    'water striders': 'Gerridae',
+    'Clostridium difficile': 'Clostridioides difficile ',
+    'horseshoe crab': 'Chelicerata',
+    'house centipede': 'Scutigeridae',
+    'Sesarmid crab': 'Sesarmidae',
+    'hermit crab': 'Paguroidea',
+    'snake-associated nematodes': 'Nematoda',
 }
 species_dict = {k.lower(): v for k, v in species_dict_.iteritems()}
 #'Petunia hybrida' doesn't work for some reason. Check it!
