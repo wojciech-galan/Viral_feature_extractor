@@ -7,7 +7,7 @@ setup(
     name="viral_seq_fetcher",
     version='0.0.2',
     description='blah',#TODO
-    url='https://github.com/wojciech-galan/Viral_feature_extractor', #TODO
+    url='https://github.com/wojciech-galan/Viral_feature_extractor',
     author='Wojciech Gałan',
     license='GNU GPL v3.0',
     install_requires=[
