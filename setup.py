@@ -5,9 +5,9 @@ from setuptools import setup, find_packages
 
 setup(
     name="viral_seq_fetcher",
-    version='0.0.1',
+    version='0.0.2',
     description='blah',#TODO
-    url='https://github.com/wojciech-galan/', #TODO
+    url='https://github.com/wojciech-galan/Viral_feature_extractor', #TODO
     author='Wojciech Gałan',
     license='GNU GPL v3.0',
     install_requires=[
