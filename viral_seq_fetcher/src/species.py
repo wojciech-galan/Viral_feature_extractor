@@ -148,7 +148,18 @@ species_dict_ = {
     'Turritella sea snails': 'Turritella',
     'fruit bat': 'Megachiroptera',
     'red currant cv. Holandsky cerveny': "Ribes rubrum",
-
+    'freshwater isopoda': 'Isopoda',
+    'Lycopersicum escultentum cv. King Kong 2': "Solanum lycopersicum",
+    "Vernonia amygdalina": 'Gymnanthemum amygdalinum',
+    'rhesus monkey': 'Macaca mulatta',
+    'false pimpernel': 'Lindernia dubia',
+    'Sida micrantha': 'Malvaceae',
+    'Ixodes eudyptidis': 'Ixodes',
+    'Heliothis armigera': 'Helicoverpa armigera',
+    'large pool of wild-caught Drosophila': 'Drosophila',
+    'Ostreococcus lucimarinus': "Ostreococcus 'lucimarinus'",
+    'Cercopithecus aethiops': 'Chlorocebus aethiops',
+    'bitter gourd': 'Momordica charantia'
 }
 species_dict = {k.lower(): v for k, v in species_dict_.iteritems()}
 #'Petunia hybrida' doesn't work for some reason. Check it!
