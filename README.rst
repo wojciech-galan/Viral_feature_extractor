@@ -35,7 +35,7 @@ and assure that the directory you have installed the program to (for Ubuntu it's
 
 Windows installation issues
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-pip fails when installing apsw (at leas on Win7), so you have to install it manually.
+pip fails when installing apsw (at least on Win7), so you have to install it manually.
 
 
 Source code
