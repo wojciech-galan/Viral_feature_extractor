@@ -119,6 +119,24 @@ species_dict_ = {
     'Sesarmid crab': 'Sesarmidae',
     'hermit crab': 'Paguroidea',
     'snake-associated nematodes': 'Nematoda',
+    'fall chinook': "Salmonidae",
+    'whitetail deer': 'Odocoileus virginianus',
+    'Spirurian nematodes': 'Spirurida',
+    'masked palm civet': 'Paguma larvata',
+    'sea anemones': 'Actiniaria',
+    'sweet potato': 'Ipomoea batatas',
+    'freshwater isoptera': 'Insecta',
+    'blue swimmer crab': 'Portunidae',
+    'Wharf roach': 'Ligia',
+    'true flies': 'Diptera',
+    'flea and ants': 'Insecta',
+    'white pine blister rust fungus': 'Cronartium ribicola',
+    'large pig roundworm': 'Ascaris suum',
+    'Vernonia cinerea': 'Cyanthillium cinereum',
+    'freshwater heteroptera': 'Heteroptera',
+    'Penaeus vannamei': 'Litopenaeus vannamei',
+    'tomato, cv. Rio Grande': "Solanum lycopersicum",
+
 }
 species_dict = {k.lower(): v for k, v in species_dict_.iteritems()}
 #'Petunia hybrida' doesn't work for some reason. Check it!
