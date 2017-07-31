@@ -136,6 +136,18 @@ species_dict_ = {
     'freshwater heteroptera': 'Heteroptera',
     'Penaeus vannamei': 'Litopenaeus vannamei',
     'tomato, cv. Rio Grande': "Solanum lycopersicum",
+    'Eucharis grandiflora': 'Eucharis x grandiflora',
+    'black currant': 'Ribes nigrum',
+    'Touch me not': 'eudicotyledons', # Touch me not is a common name for two unrelated groups of plants
+    'Canada goose': 'Branta canadensis',
+    'Pekin duck': 'Anas',
+    'Dioscorea opposita': 'Dioscorea',
+    'Chinese land snail': 'Mastigeulota kiangsinensis',
+    'raspberry plant': 'Rubus',
+    'large pool of wild-caught Drosophila': 'Drosophila',
+    'Turritella sea snails': 'Turritella',
+    'fruit bat': 'Megachiroptera',
+    'red currant cv. Holandsky cerveny': "Ribes rubrum",
 
 }
 species_dict = {k.lower(): v for k, v in species_dict_.iteritems()}
