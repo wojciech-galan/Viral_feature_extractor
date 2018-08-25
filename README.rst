@@ -72,7 +72,7 @@ The container can be easily read. Depending on the content of the source NCBI Nu
 .. code:: python
 
 	from viral_seq_fetcher.src import SeqContainer
-	container = SeqContainer.Container.fromFile('files/container_Tue_May_16_14:34:43_2017.dump') # replace with your container file path
+	container = SeqContainer.Container.fromFile('files/container_Fri_Oct__6_14:26:35_2017.dump') # replace with your container file path
 	print len(container), "reference genomic viral sequences"
 	with_host = container.getVirusesWithHost()
 	print len(with_host), "of the sequences sequences"
