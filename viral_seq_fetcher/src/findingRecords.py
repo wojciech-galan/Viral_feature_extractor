@@ -79,7 +79,7 @@ def createDirIfNotExists(path):
 
 def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir'], tax_directory=CONF['taxonomy_dir'], \
              improper_host_path=CONF['improper_host_path'], processed_seq_directory=CONF['processed_seq_dir'],
-             rettype='xml'):
+             rettype='native'):
     '''Argumenty:
     - term - to co dostajemy po termCreation
     - ids - lista identyfikatorow sekwencji z bazy nuccore
