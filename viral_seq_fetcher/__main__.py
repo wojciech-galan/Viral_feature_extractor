@@ -57,7 +57,7 @@ def main(args=sys.argv[1:]):
     timeout = result.timeout
     out_dir = os.path.expanduser(result.outdir.lstrip(os.path.sep))
     debug = result.d
-    container_path = os.path.join(out_dir, result.container)
+    container_path = Container.correct_path(os.path.join(out_dir, result.container))
     # term = termCreation('complete', 'title', 'refseq', 'viruses')
     # print term
     # term na podstawie http://www.ncbi.nlm.nih.gov/genomes/GenomesHome.cgi?taxid=10239&hopt=faq#retrieve%20refseq
@@ -87,7 +87,8 @@ def main(args=sys.argv[1:]):
         seq_representations = []
     seq_representations.extend(findHost(term, ids, out_dir, debug, result.verbose, tax_directory=CONF['taxonomy_dir']))
     createDirIfNotExists(out_dir)
-    container_path = Container(seq_representations).save(container_path)
+    with open(container_path, 'w') as f:
+        pickle.dump(Container(seq_representations), f, pickle.HIGHEST_PROTOCOL)
     print "output saved in %s" %container_path
 
 

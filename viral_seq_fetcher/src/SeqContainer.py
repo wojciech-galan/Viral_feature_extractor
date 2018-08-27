@@ -106,11 +106,10 @@ class Container(object):
     # 	with open( os.path.join(containers_path, f_name), 'wb' ) as f:
     # 		pickle.dump( self, f, pickle.HIGHEST_PROTOCOL )
 
-    def save(self, path):
+    @staticmethod
+    def correct_path(path):
         if os.name == 'nt':
             path = path.replace(':', '_')
-        with open(path, 'wb') as f:
-            pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
         return path
 
     def getDsRNAViruses(self):
