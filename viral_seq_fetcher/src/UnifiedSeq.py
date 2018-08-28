@@ -101,14 +101,14 @@ class UnifiedSeq(BaseXML):
                         self.gene_references.extend(
                             sequence.gene_references)  # ważne! - dodaję gene_refferences sekwencji składowych. moga być np. w tej samej lokalizacji, co gene_refferences dla całego setu, ale np na innej nici
             if obj.sequences[0].biomol[0] not in ('genomic', 'cRNA'):
-                logger.info("Biomolecule for gi=%s is neither genomic nor cRNA" % uniSeq.gi)
+                logger.info("Biomolecule for gi=%s is neither genomic nor cRNA" % self.gi)
             self.seq = obj.sequences[0].seq
             self.textseq_id = obj.sequences[0].textseq_id
             self.strand = obj.sequences[0].strand
             for x in range(1, len(obj.sequences)):
                 sequence = obj.sequences[x]
                 if sequence.biomol[0] != 'peptide':
-                    pdb.set_trace()
+                    logger.info("Seq_biomol for gi=%s is not 'peptide', but '%s'" % (self.gi, sequence.biomol[0]))
             if obj.host:
                 self.host = obj.host
             else:
@@ -208,7 +208,6 @@ class SeqRepresentation(BaseXML):
         else:
             self.molecule = None
             logger.info("For gi=%s molecule=%s" % (uniSeq.gi, uniSeq.molecule))
-            pdb.set_trace()  # TODO wyjebać?
         if uniSeq.seq:
             self.length = len(uniSeq.seq)
         else:
