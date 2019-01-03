@@ -58,7 +58,7 @@ class LittleParser(object):
         return cls(**object_dict)
 
     @classmethod
-    def fromHandle(cls, handle, taxonomy_dir, debug, verbose):
+    def fromHandle(cls, handle, fasta_path, taxonomy_dir, debug, verbose):
         '''handle - uchwyt do pliku lub zasobu w sieci'''
         object_dict = {}
         try:
@@ -80,7 +80,7 @@ class LittleParser(object):
         object_dict['_za_ktorym_razem'] = 0
         object_dict['_host'] = []
         # file is empty - throws XMLSyntaxError
-        seq = _parse(handle, taxonomy_dir, debug, verbose)
+        seq = _parse(handle, fasta_path, taxonomy_dir, debug, verbose)
         return seq
 
     @constantIfProper
@@ -99,7 +99,7 @@ class LittleParser(object):
         pass
 
 
-def _parse(handle, taxonomy_dir, debug, verbose):
+def _parse(handle, fasta_path, taxonomy_dir, debug, verbose):
     object_dict = {}
     if verbose:
         print handle.name
@@ -116,13 +116,13 @@ def _parse(handle, taxonomy_dir, debug, verbose):
 
     if 'seq_entry_seq_' in seq_entry_:
         try:
-            seq_entry_seq = StandaloneSeqEntrySeq(seq_entry_.seq_entry_seq_, gi)
+            seq_entry_seq = StandaloneSeqEntrySeq(seq_entry_.seq_entry_seq_, gi, fasta_path)
         except SeqEntrySeqException, sese:
             logger.debug("While processing %s: %s"(str(sese), gi))
             print sese.message
         uniSeq = UnifiedSeq(seq_entry_seq)
     elif 'seq_entry_set_' in seq_entry_:
-        seq_entry_set = SeqEntrySet(seq_entry_.seq_entry_set_, gi)
+        seq_entry_set = SeqEntrySet(seq_entry_.seq_entry_set_, gi, fasta_path)
         uniSeq = UnifiedSeq(seq_entry_set)
     else:
         raise LittleParserException("No seq_entry_seq_ nor seq_entry_set_ in seq_entry_")

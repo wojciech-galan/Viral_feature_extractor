@@ -27,6 +27,7 @@ import os
 # from ParserClasses import Seq_entry_seq_
 from simple_classes import BaseXML, MyException, DictContainsInterface
 from simple_classes import UnexpectedValueException
+from fasta import read_fasta_file
 
 logger = logging.getLogger(os.path.basename(__file__))
 
@@ -34,7 +35,7 @@ logger = logging.getLogger(os.path.basename(__file__))
 class SeqEntrySeq(BaseXML):
     "Klasa macierzysta do wyciągania potrzebnych wartości z Seq_entry_seq_"
 
-    def __init__(self, seq_entry_seq_):
+    def __init__(self, seq_entry_seq_, fasta_path):
         '''Argumenty:
             -	seq_entry_seq_ - w pełni utworzony obiekt klasy Seq_entry_seq_'''
         super(SeqEntrySeq, self).__init__()
@@ -49,12 +50,7 @@ class SeqEntrySeq(BaseXML):
             print self.representation
             # pdb.set_trace()
             raise SeqEntrySeqException('representation')
-            # pdb.set_trace()
-        if 'seq_inst_seq_data__' in seq_inst:
-            seq = seq_inst.seq_inst_seq_data__.seq_data_
-            self.temp['seq'] = seq
-        else:
-            self.temp['seq'] = None
+        self.temp['seq'] = read_fasta_file(fasta_path)
         try:
             self.strand = seq_inst.seq_inst_strand_.value
         except AttributeError:
@@ -142,16 +138,16 @@ class SeqEntrySeq(BaseXML):
 class StandaloneSeqEntrySeq(SeqEntrySeq):
     "Klasa do wyciągania potrzebnych wartości z Seq_entry_seq_"
 
-    def __init__(self, seq_entry_seq_, gi):
+    def __init__(self, seq_entry_seq_, gi, fasta_path):
         '''Argumenty:
             -	seq_entry_seq_ - w pełni utworzony obiekt klasy Seq_entry_seq_'''
-        super(StandaloneSeqEntrySeq, self).__init__(seq_entry_seq_)
+        super(StandaloneSeqEntrySeq, self).__init__(seq_entry_seq_, fasta_path)
         self.gi = gi
         seq = self.temp['seq']
         try:
             self.seq = seq.seq_data_iupacna_.iupacna.text
         except AttributeError:
-            self.seq = None
+            self.seq = seq
         if self.molecule not in ['rna', 'dna']:
             print self.molecule
             pdb.set_trace()
@@ -167,11 +163,7 @@ class StandaloneSeqEntrySeq(SeqEntrySeq):
         orgname = org_ref.org_ref_orgname_.orgname
         self.virus_name = orgname.orgname_name.orgname_name_virus.text
         self.gencode = orgname.orgname_gcode.text
-        biosource_genome = biosource.biosource_genome
-        self.genome = (
-        biosource_genome.value, biosource_genome.text)  # <BioSource_genome value="genomic">1</BioSource_genome>
-        # w takich przypadkach value to genomic, text to 1
-        # zastosowanie?
+
         self.subsource_subtype = None  # wybieranie segmentowanych
         if 'biosource_subtype' in biosource:  # nie zawsze jest
             biosource_subtype = biosource.biosource_subtype
@@ -197,17 +189,15 @@ class StandaloneSeqEntrySeq(SeqEntrySeq):
 class SeqEntrySeqPartOfSet(SeqEntrySeq):
     "Klasa do wyciągania potrzebnych wartości z Seq_entry_seq_"
 
-    def __init__(self, seq_entry_seq_):
+    def __init__(self, seq_entry_seq_, fasta_path):
         '''Argumenty:
             -	seq_entry_seq_ - w pełni utworzony obiekt klasy Seq_entry_seq_'''
-        super(SeqEntrySeqPartOfSet, self).__init__(seq_entry_seq_)
+        super(SeqEntrySeqPartOfSet, self).__init__(seq_entry_seq_, fasta_path)
         seq = self.temp['seq']
         if seq and 'seq_data_iupacna_' in seq:
             self.seq = seq.seq_data_iupacna_.iupacna.text
-        elif seq and 'seq_data_iupacaa_' in seq:
-            self.seq = seq.seq_data_iupacaa_.iupacaa.text
         else:
-            self.seq = None
+            self.seq = seq
 
             # inst skończony
         '''bioseq_ids = bioseq.bioseq_id
@@ -280,8 +270,6 @@ class Gene(BaseXML, DictContainsInterface):
             self.gene_ref_desc = gene_ref_.gene_ref_desc_.text
         except AttributeError:
             self.gene_ref_desc = None
-        if not any(self.__dict__.values()):
-            pdb.set_trace()
 
     def getName(self):
         if 'locus' in self and self.locus:

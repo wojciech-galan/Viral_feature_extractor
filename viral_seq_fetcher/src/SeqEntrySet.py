@@ -24,7 +24,7 @@ import pdb
 
 from simple_classes import BaseXML
 from simple_classes import MyException
-from SeqEntrySeq import SeqEntrySeqPartOfSet  # , SeqEntrySeqException, BiosourceNotPresent, NotDnaNorRna
+from SeqEntrySeq import SeqEntrySeqPartOfSet, SeqEntrySeqException#, BiosourceNotPresent, NotDnaNorRna
 from SeqEntrySeq import Product
 from SeqEntrySeq import GeneRef, GeneRefException
 from SeqEntrySeq import CdRegion, CdRegionException
@@ -34,7 +34,7 @@ from SeqEntrySeq import CdRegionRef, CdRegionRefException
 class SeqEntrySet(BaseXML):
     "Klasa do wyciągania potrzebnych wartości z Seq_entry_set_"
 
-    def __init__(self, root, gi):
+    def __init__(self, root, gi, fasta_path):
         '''Argumenty:
             -	seq_entry_set_ - w pełni utworzony obiekt klasy Seq_entry_seq_'''
         super(SeqEntrySet, self).__init__()
@@ -154,7 +154,7 @@ class SeqEntrySet(BaseXML):
         for n in range(len(seqs)):
             seq = seqs[n]
             try:
-                self.sequences.append(SeqEntrySeqPartOfSet(seq.seq_entry_seq_))
+                self.sequences.append(SeqEntrySeqPartOfSet(seq.seq_entry_seq_, fasta_path))
             except Exception as e:
                 print type(e).__name__, e
                 pdb.set_trace()

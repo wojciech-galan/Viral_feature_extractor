@@ -36,7 +36,7 @@ from Bio import Entrez
 
 from UnifiedSeq import UnifiedSeq
 from LittleParser import LittleParser
-from simple_classes import UnexpectedValueException
+from SeqEntrySeq import SeqEntrySeqException
 from constants import *
 
 logger = logging.getLogger(os.path.basename(__file__))
@@ -101,15 +101,20 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
             print '%s ids left' % len(id_list)
         id_ = id_list[0]
         path = os.path.join(seq_directory, id_)
+        fasta_path = path+'.fasta'
         processed_path = os.path.join(processed_seq_directory, id_)
         # ściągnięcie pliku
         while not os.path.exists(path):
             try:
                 handle = Entrez.efetch(db="nuccore", id=id_, rettype=rettype, retmode="xml")
+                handle_fasta = Entrez.efetch(db='nuccore', id=id_, rettype='fasta', retmode='text')
                 if verbose:
                     print handle.geturl()
                 with open(path, 'w') as file_handle:
                     file_handle.write(handle.read())
+                time.sleep(1)
+                with open(fasta_path, 'w') as fasta_write_handle:
+                    fasta_write_handle.write(handle_fasta.read())
             except (urllib2.URLError, socket.timeout, socket.error), e:
                 logger.error(e)
                 print e
@@ -121,7 +126,7 @@ def findHost(term, id_list, out_dir, debug, verbose, seq_directory=CONF['seq_dir
                 seq = pickle.load(open(processed_path, 'rb'))
             else:
                 with open(path) as handle:
-                    seq = LittleParser.fromHandle(handle, tax_directory, debug, verbose)
+                    seq = LittleParser.fromHandle(handle, fasta_path, tax_directory, debug, verbose)
                     pickle.dump(seq, open(processed_path, 'wb'), pickle.HIGHEST_PROTOCOL)
             seqs.append(seq)
             id_list.remove(id_)
