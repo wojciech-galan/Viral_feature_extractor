@@ -60,7 +60,6 @@ class Container(object):
 
     def __add__(self, other):
         if type(self) == type(other):
-            assert self.created == other.created
             return Container(copy.deepcopy([x for x in self.seqs]) + copy.deepcopy([x for x in other.seqs]),
                              self.created)
         assert all(type(element) == SeqRepresentation for element in other)
