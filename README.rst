@@ -67,13 +67,28 @@ What to do with the container?
 ~~~~~~~~~~~~
 
 The container can be easily read. Depending on the content of the source NCBI Nucleotide files, elements of the container
-(which are viral sequence representations) could contain bunch of different sequence features:
+(which are viral sequence representations) could contain bunch of different sequence features.
+How to load the container:
 
 .. code:: python
-
     from viral_seq_fetcher.src.SeqContainer import Container
     import cPickle as pickle
     container = Container.fromFile('container_Wed_Jan__2_13:05:06_2019.dump') # replace with your container file path
+
+The container contains lots of getter methods suitable for viruses
+
+.. code:: python
+    dir(container)
+    ['__add__', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__getitem__', '__hash__', '__init__', '__iter__', '__len__', '__module__', '__new__', '__radd__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__weakref__', 'correct_path', 'created', 'fromFile', 'getDependoviruses', 'getDsDNAViruses', 'getDsRNAViruses', 'getIds', 'getRetroViruses', 'getSsDNAViruses', 'getSsRNANegativeStrandViruses', 'getSsRNAPositiveStrandViruses', 'getSsRNAViruses', 'getUnassignedSsRNAViruses', 'getUnclasifiedSsRNAViruses', 'getVirusesInfectingSpeciviedGroup', 'getVirusesOfLineage', 'getVirusesWithHost', 'removeIds', 'seqs']
+
+For example you could easily obtain container of  either dsDNA viruses or retroviruses:
+
+.. code:: python
+    retro = getRetroViruses()
+    dsDNA = getDsDNAViruses()
+
+
+.. code:: python
     print len(container), "reference genomic viral sequences"
     with_host = container.getVirusesWithHost()
     print len(with_host), "of the sequences has host"
@@ -81,8 +96,8 @@ The container can be easily read. Depending on the content of the source NCBI Nu
     print dir(with_host[0])
     print with_host[0].nuc_frequencies # mono- and dinucleotide frequencies
     print with_host[0].host_lineage
-    print with_host[0].relative_nuc_frequencies # 'second order bias'
-    print with_host[0].relative_trinuc_freqs # 'third order bias'
+    print with_host[0].relative_nuc_frequencies_one_strand # 'second order bias'
+    print with_host[0].relative_trinuc_freqs_one_strand # 'third order bias'
 
 Citation
 --------
