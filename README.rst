@@ -93,20 +93,66 @@ For example you could easily obtain container of  either dsDNA viruses or retrov
 
 .. code:: python
 
-    >>> retro = getRetroViruses()
-    >>> dsDNA = getDsDNAViruses()
+    >>> retro = container.getRetroViruses()
+    >>> dsDNA = container.getDsDNAViruses()
 
+Containers are iterable and know about their length. You can also add or subtract them:
 
 .. code:: python
-    print len(container), "reference genomic viral sequences"
-    with_host = container.getVirusesWithHost()
-    print len(with_host), "of the sequences has host"
-    print '---------------------------------------------------'
-    print dir(with_host[0])
-    print with_host[0].nuc_frequencies # mono- and dinucleotide frequencies
-    print with_host[0].host_lineage
-    print with_host[0].relative_nuc_frequencies_one_strand # 'second order bias'
-    print with_host[0].relative_trinuc_freqs_one_strand # 'third order bias'
+
+    >>> container2 = retro + dsDNA
+    >>> print len(container2)
+    3136
+    >>> container3 = container2 - dsDNA
+    >>> print len(container3)
+    19
+    >>> print len(retro)
+    19
+
+You could pick viruses of some specific lineage. The lineage is the same as in NCBI Taxonomy database. Supposing you'd
+like to pick Orthomyxoviridae, you also have to specify level of the taxon in NCBI Taxonomy:
+
+.. code:: python
+
+    >>> container4 = container.getVirusesOfLineage(3, 'Orthomyxoviridae')
+    >>> len(container4)
+    111
+
+Similarly, you can pick viruses which infect specific host taxon:
+
+.. code:: python
+
+    >>> container5 = container.getVirusesInfectingSpecifiedGroup(17, 'Mammalia')
+    >>> len(container5)
+    1193
+
+Elements of the container posses specific attributes and you can check them out:
+
+.. code:: python
+
+    >>> dir(container5[0])
+    ['__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', \
+    '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', \
+    '__str__', '__subclasshook__', '__weakref__', 'avg_cai_all', 'avg_cai_proper', 'avg_codons_all', 'avg_codons_proper', \
+    'avg_enc_all', 'avg_enc_proper', 'avg_rscu_all', 'avg_rscu_proper', 'fromString', 'gi', 'host', 'host_lineage', \
+    'length', 'lineage', 'molecule', 'nuc_frequencies', 'nuc_frequencies_inside_cd_regions', \
+    'nuc_frequencies_outside_cd_regions', 'num_of_all_cd_regions', 'num_of_proper_cd_regions', 'relative_nuc_frequencies', \
+    'relative_nuc_frequencies_inside_cd_regions', 'relative_nuc_frequencies_one_strand', \
+    'relative_nuc_frequencies_outside_cd_regions', 'relative_trinuc_freqs', 'relative_trinuc_freqs_inside_cd_regions', \
+    'relative_trinuc_freqs_one_strand', 'relative_trinuc_freqs_outside_cd_regions', 'std_cai_all', 'std_cai_proper', \
+    'std_codons_all', 'std_codons_proper', 'std_enc_all', 'std_enc_proper', 'std_rscu_all', 'std_rscu_proper', 'strand', \
+    'toXML']
+    >>> container5[0].host_lineage
+    [u'cellular organisms', u'Eukaryota', u'Opisthokonta', u'Metazoa', u'Eumetazoa', u'Bilateria', u'Deuterostomia', \
+    u'Chordata', u'Craniata', u'Vertebrata', u'Gnathostomata', u'Teleostomi', u'Euteleostomi', u'Sarcopterygii', \
+    u'Dipnotetrapodomorpha', u'Tetrapoda', u'Amniota', u'Mammalia', u'Theria', u'Eutheria', u'Boreoeutheria', \
+    u'Euarchontoglires', u'Glires', u'Rodentia', u'Myomorpha', u'Muroidea', u'Cricetidae', u'Sigmodontinae', \
+    u'Oligoryzomys']
+    >>> container5[0].relative_nuc_frequencies_one_strand
+    {'AA': 1.0565006899536655, 'AC': 0.8168992503202865, 'GT': 0.8668581432207304, 'AG': 1.1108863816197967, \
+    'CC': 1.2290949346612152, 'CA': 1.2912278472804528, 'CG': 0.2211828767496193, 'TT': 1.0224296856926356, \
+    'GG': 1.121613797281987, 'GC': 0.9707470701788848, 'AT': 1.002957437343382, 'GA': 1.0819067368818889, \
+    'TG': 1.385185692775394, 'TA': 0.6835442407372095, 'TC': 1.023907185238434, 'CT': 1.0807909177516801}
 
 Citation
 --------
