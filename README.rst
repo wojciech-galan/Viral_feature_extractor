@@ -73,7 +73,6 @@ How to load the container:
 .. code:: python
 
     >>> from viral_seq_fetcher.src.SeqContainer import Container
-    >>> import cPickle as pickle
     >>> container = Container.fromFile('container_Wed_Jan__2_13:05:06_2019.dump') # replace with your container file path
 
 The container contains lots of getter methods suitable for viruses
