@@ -72,23 +72,23 @@ How to load the container:
 
 .. code:: python
 
-    from viral_seq_fetcher.src.SeqContainer import Container
-    import cPickle as pickle
-    container = Container.fromFile('container_Wed_Jan__2_13:05:06_2019.dump') # replace with your container file path
+    >>> from viral_seq_fetcher.src.SeqContainer import Container
+    >>> import cPickle as pickle
+    >>> container = Container.fromFile('container_Wed_Jan__2_13:05:06_2019.dump') # replace with your container file path
 
 The container contains lots of getter methods suitable for viruses
 
 .. code:: python
 
-    dir(container)
+    >>> dir(container)
     ['__add__', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__getitem__', '__hash__', '__init__', '__iter__', '__len__', '__module__', '__new__', '__radd__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__weakref__', 'correct_path', 'created', 'fromFile', 'getDependoviruses', 'getDsDNAViruses', 'getDsRNAViruses', 'getIds', 'getRetroViruses', 'getSsDNAViruses', 'getSsRNANegativeStrandViruses', 'getSsRNAPositiveStrandViruses', 'getSsRNAViruses', 'getUnassignedSsRNAViruses', 'getUnclasifiedSsRNAViruses', 'getVirusesInfectingSpeciviedGroup', 'getVirusesOfLineage', 'getVirusesWithHost', 'removeIds', 'seqs']
 
 For example you could easily obtain container of  either dsDNA viruses or retroviruses:
 
 .. code:: python
 
-    retro = getRetroViruses()
-    dsDNA = getDsDNAViruses()
+    >>> retro = getRetroViruses()
+    >>> dsDNA = getDsDNAViruses()
 
 
 .. code:: python
