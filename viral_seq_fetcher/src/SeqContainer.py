@@ -139,7 +139,7 @@ class Container(object):
     def getRetroViruses(self):
         return Container([x for x in self.seqs if x.lineage[1] == 'Retro-transcribing viruses'], self.created)
 
-    def getVirusesInfectingSpeciviedGroup(self, level, group_name):
+    def getVirusesInfectingSpecifiedGroup(self, level, group_name):
         '''Pobiera wirusy infekujące określoną grupę organizmów. Argumenty:
             - level - pozycja w host_lineage, na której znajduje się nazwa grupy, liczona od 0
             - group_name - nazwa grupy'''
