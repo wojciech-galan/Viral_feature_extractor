@@ -156,5 +156,6 @@ Elements of the container posses specific attributes and you can check them out:
 Citation
 --------
 
-[![DOI](https://zenodo.org/badge/55834194.svg)](https://zenodo.org/badge/latestdoi/55834194)
+.. image:: https://zenodo.org/badge/55834194.svg
+   :target: https://zenodo.org/badge/latestdoi/55834194
 
