@@ -81,7 +81,13 @@ The container contains lots of getter methods suitable for viruses
 .. code:: python
 
     >>> dir(container)
-    ['__add__', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__getitem__', '__hash__', '__init__', '__iter__', '__len__', '__module__', '__new__', '__radd__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__weakref__', 'correct_path', 'created', 'fromFile', 'getDependoviruses', 'getDsDNAViruses', 'getDsRNAViruses', 'getIds', 'getRetroViruses', 'getSsDNAViruses', 'getSsRNANegativeStrandViruses', 'getSsRNAPositiveStrandViruses', 'getSsRNAViruses', 'getUnassignedSsRNAViruses', 'getUnclasifiedSsRNAViruses', 'getVirusesInfectingSpeciviedGroup', 'getVirusesOfLineage', 'getVirusesWithHost', 'removeIds', 'seqs']
+    ['__add__', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__getitem__', \
+    '__hash__', '__init__', '__iter__', '__len__', '__module__', '__new__', '__radd__', '__reduce__', '__reduce_ex__', \
+    '__repr__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__weakref__', 'correct_path', \
+    'created', 'fromFile', 'getDependoviruses', 'getDsDNAViruses', 'getDsRNAViruses', 'getIds', 'getRetroViruses', \
+    'getSsDNAViruses', 'getSsRNANegativeStrandViruses', 'getSsRNAPositiveStrandViruses', 'getSsRNAViruses', \
+    'getUnassignedSsRNAViruses', 'getUnclasifiedSsRNAViruses', 'getVirusesInfectingSpeciviedGroup', \
+    'getVirusesOfLineage', 'getVirusesWithHost', 'removeIds', 'seqs']
 
 For example you could easily obtain container of  either dsDNA viruses or retroviruses:
 
