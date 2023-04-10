@@ -25,7 +25,7 @@ species_dict_ = {
     'cucumber': 'Cucumis sativus',
     'Yacon': 'Smallanthus sonchifolius',
     'pepper': 'Piper',
-    'chilli': 'Capsicum',  # nie jest to pewne. Do rodzaju Capsicum należy kilka gatunków papryczek chili oraz inne
+    'chilli': 'Capsicum',  # not sure. There are many species in Capsicum genus.
     'Canna': 'Canna indica',
     'lettuce': 'Lactuca sativa',
     'banana': 'Musa',
@@ -44,7 +44,7 @@ species_dict_ = {
     'wigeon': 'Mareca',
     'penguin': 'Spheniscidae',
     'dove': 'Columbidae',
-    'mink': 'Mustelinae',  # norki. Ta rodzina zawiera więcej gatunków.
+    'mink': 'Mustelinae',  # Mustelinae subfamily consists of many species, not only minks
     'rose': 'Rosa',
     'pigeon': 'Columba livia domestica',
     'porcine': 'Sus scrofa',
