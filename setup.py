@@ -5,16 +5,16 @@ from setuptools import setup, find_packages
 
 setup(
     name="viral_seq_fetcher",
-    version='0.0.5',
+    version='0.0.6',
     description='blah',#TODO
     url='https://github.com/wojciech-galan/Viral_feature_extractor',
     author='Wojciech Gałan',
     license='GNU GPL v3.0',
     install_requires=[
-        'apsw',
-        'numpy',
-        'biopython',
-        'lxml'
+        'apsw==3.8.11.1.post1',
+        'biopython==1.68',
+        'numpy==1.13.3',
+        'lxml==3.3'
     ],
     packages=find_packages(),
     classifiers=[
@@ -24,7 +24,7 @@ setup(
         'Programming Language :: Python :: 2.7'
     ],
     entry_points = {
-        'console_scripts':[
+        'console_scripts': [
             'fetch_taxonomy = viral_seq_fetcher.__main__:main_for_host_processing',
             'fetch_viral_sequences = viral_seq_fetcher.__main__:main'
         ]

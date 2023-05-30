@@ -15,9 +15,9 @@ Dependencies
 viral_seq_fetcher requires:
 
 - Python = 2.7
-- NumPy >= 1.6.1
-- apsw >= 3.7.6.3
-- Biopython >= 1.68
+- NumPy = 1.13.3
+- apsw = 3.8.11.1.post1
+- Biopython = 1.68
 - lxml >= 3.3
 - git (required for installation with pip)
 - (for Windows users only) Visual C++ Compiler for Python 2.7 

@@ -1,4 +1,4 @@
-apsw>=3.7.6.3
-biopython>=1.68
-numpy>=1.6.1
-lxml>=3.3
+apsw==3.8.11.1.post1
+biopython==1.68
+numpy==1.13.3
+lxml==3.3
