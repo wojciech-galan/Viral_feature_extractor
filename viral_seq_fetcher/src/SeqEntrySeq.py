@@ -386,8 +386,11 @@ class CdRegion(BaseXML, DictContainsInterface):
         if 'cdregion_code' in cdregion:
             code = cdregion.cdregion_code.genetic_code_.genetic_code_e_
             if len(code) != 1:
-                pdb.set_trace()
-            self.code = code[0].genetic_code_e_id_.text  # id kodu genetycznego. Jeśli go nie będzie, trza go wyłuskać
+                found_codes = [element.genetic_code_e_id_.text for element in code]
+                assert len(set(found_codes)) == 1
+                self.code = found_codes[0]
+            else:
+                self.code = code[0].genetic_code_e_id_.text  # id kodu genetycznego. Jeśli go nie będzie, trza go wyłuskać
         else:
             self.code = '1'
         if 'cdregion_orf' in cdregion:

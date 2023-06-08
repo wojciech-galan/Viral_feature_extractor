@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="viral_seq_fetcher",
-    version='0.0.6',
+    version='0.0.7',
     description='blah',#TODO
     url='https://github.com/wojciech-galan/Viral_feature_extractor',
     author='Wojciech Gałan',
