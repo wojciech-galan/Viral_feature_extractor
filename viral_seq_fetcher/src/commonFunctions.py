@@ -380,7 +380,9 @@ def revSubList(seq, list_of_tup_sub):
     start = min(temp_s)
     for tup_sub in list_of_tup_sub:
         temp_s -= set(range(tup_sub[0], tup_sub[1]))
-    if temp_s:
+    if len(temp_s) == 1:
+        return list(temp_s)
+    elif temp_s:
         temp_s = list(temp_s)
         temp_s.sort()
         for x in range(1, len(temp_s)):
