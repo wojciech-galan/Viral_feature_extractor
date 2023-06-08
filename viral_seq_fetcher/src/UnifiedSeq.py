@@ -157,7 +157,7 @@ class UnifiedSeq(BaseXML):
                 pdb.set_trace()
         merged = mergeLists(start_end_tup)
         rev_sub = revSubList(self.seq, merged)
-        if rev_sub:
+        if len(rev_sub)>1:
             return [self.seq[tup[0]:tup[1]] for tup in rev_sub]
         else:
             return []
